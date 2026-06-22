@@ -62,9 +62,17 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative px-4 grain corner-bracket overflow-hidden pb-16">
+      <section className="hero relative min-h-screen flex items-center justify-center px-4 grain corner-bracket overflow-hidden">
+        {banners.banner1.videoUrl ? (
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+            <source src={banners.banner1.videoUrl} type="video/mp4" />
+          </video>
+        ) : (
+          <div className="absolute inset-0 banner-placeholder" />
+        )}
+        <div className="absolute inset-0 bg-black/55" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/5 to-transparent pointer-events-none" />
-        <div className="max-w-4xl mx-auto text-center relative z-10 pt-24 pb-8 md:pt-28">
+        <div className="max-w-4xl mx-auto text-center relative z-10 py-24">
           <h1 className="font-heading text-[40px] md:text-[72px] font-bold leading-[1.1] mb-6">
             Shoot Different.<br />
             <span className="text-[#FF2D78]">Capture Everything.</span>
@@ -72,7 +80,7 @@ export default function Home() {
           <p className="font-body text-base md:text-lg text-[#999] max-w-xl mx-auto mb-10 leading-relaxed">
             Lahore's only curated digicam store. Y2K, CCD & vintage cameras shipped across Pakistan.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="hero-buttons flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/shop" className="bg-[#FF2D78] text-white font-semibold px-8 py-3 text-sm hover:bg-[#FF2D78]/90 transition rounded" style={{ letterSpacing: '0.04em' }}>
               Shop Now
             </Link>
@@ -81,21 +89,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-
-        <div className="hero-video-container relative z-10">
-          {banners.banner1.videoUrl ? (
-            <video autoPlay muted loop playsInline>
-              <source src={banners.banner1.videoUrl} type="video/mp4" />
-            </video>
-          ) : (
-            <div className="banner-placeholder">
-              <i className="ti ti-video" />
-              <p>Upload video from Admin → Banners</p>
-              <span>Recommended: 16:9 for this slot</span>
-            </div>
-          )}
-        </div>
-        <p className="text-center text-[#666] text-[13px] mt-4 relative z-10">Tap to explore our collection</p>
       </section>
 
       {/* Video Banner 2 — Shoot Like It's 2004 */}
