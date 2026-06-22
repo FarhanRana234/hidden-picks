@@ -62,9 +62,9 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 grain corner-bracket overflow-hidden">
+      <section className="relative px-4 grain corner-bracket overflow-hidden pb-16">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/5 to-transparent pointer-events-none" />
-        <div className="max-w-4xl mx-auto text-center relative z-10 py-24">
+        <div className="max-w-4xl mx-auto text-center relative z-10 pt-24 pb-8 md:pt-28">
           <h1 className="font-heading text-[40px] md:text-[72px] font-bold leading-[1.1] mb-6">
             Shoot Different.<br />
             <span className="text-[#FF2D78]">Capture Everything.</span>
@@ -81,64 +81,62 @@ export default function Home() {
             </a>
           </div>
         </div>
-      </section>
 
-      {/* Video Banner 1 — The Flip Era */}
-      <section className="relative w-full min-h-[500px] overflow-hidden">
-        {banners.banner1.videoUrl ? (
-          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-            <source src={banners.banner1.videoUrl} type="video/mp4" />
-          </video>
-        ) : (
-          <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[#333]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-            <p className="text-[#444] text-sm mt-3">No video uploaded yet</p>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-[500px] px-4 text-center">
-          <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-4">{banners.banner1.heading}</h2>
-          <p className="text-[#999] text-lg">{banners.banner1.subtext}</p>
+        <div className="hero-video-container relative z-10">
+          {banners.banner1.videoUrl ? (
+            <video autoPlay muted loop playsInline>
+              <source src={banners.banner1.videoUrl} type="video/mp4" />
+            </video>
+          ) : (
+            <div className="banner-placeholder">
+              <i className="ti ti-video" />
+              <p>Upload video from Admin → Banners</p>
+              <span>Recommended: 16:9 for this slot</span>
+            </div>
+          )}
         </div>
+        <p className="text-center text-[#666] text-[13px] mt-4 relative z-10">Tap to explore our collection</p>
       </section>
 
       {/* Video Banner 2 — Shoot Like It's 2004 */}
-      <section className="relative w-full min-h-[500px] overflow-hidden">
+      <section className="banner-2">
         {banners.banner2.videoUrl ? (
           <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
             <source src={banners.banner2.videoUrl} type="video/mp4" />
           </video>
         ) : (
-          <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[#333]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-            <p className="text-[#444] text-sm mt-3">No video uploaded yet</p>
+          <div className="banner-placeholder">
+            <i className="ti ti-video" />
+            <p>Upload video from Admin → Banners</p>
+            <span>Recommended: 21:9 cinematic</span>
           </div>
         )}
         <div className="absolute inset-0 bg-black/55" />
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-[500px] px-4 text-center">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-4">{banners.banner2.heading}</h2>
           <p className="text-[#999] text-lg">{banners.banner2.subtext}</p>
         </div>
       </section>
 
       {/* Video Banner 3 — 50/50 Split */}
-      <section className="grid grid-cols-1 md:grid-cols-2 min-h-[500px]">
-        <div className="bg-[#0A0A0A] flex flex-col items-center justify-center px-8 py-16 text-center md:text-left md:items-start">
+      <section className="banner-3">
+        <div className="text-side bg-[#0A0A0A] flex flex-col items-center justify-center px-8 py-16 text-center md:text-left md:items-start">
           <h2 className="font-heading text-3xl md:text-5xl font-bold text-white mb-4">{banners.banner3.heading}</h2>
           <p className="text-[#999] max-w-md mb-8 leading-relaxed">{banners.banner3.subtext}</p>
           <Link to="/shop" className="bg-[#FF2D78] text-white font-semibold px-8 py-3 text-sm hover:bg-[#FF2D78]/90 transition rounded" style={{ letterSpacing: '0.04em' }}>
-            shop now
+            Shop Now
           </Link>
         </div>
-        <div className="relative min-h-[300px] md:min-h-full overflow-hidden">
+        <div className="video-side relative overflow-hidden">
           {banners.banner3.videoUrl ? (
             <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
               <source src={banners.banner3.videoUrl} type="video/mp4" />
             </video>
           ) : (
-            <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[#333]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-              <p className="text-[#444] text-sm mt-3">No video uploaded yet</p>
+            <div className="banner-placeholder">
+              <i className="ti ti-video" />
+              <p>Upload video from Admin → Banners</p>
+              <span>Recommended: 9:16 or 1:1</span>
             </div>
           )}
         </div>
