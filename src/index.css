@@ -188,6 +188,7 @@ body {
 
   .banner-2 {
     aspect-ratio: 4/3;
+    max-height: none;
   }
 
   .banner-2 h2 {
@@ -201,6 +202,7 @@ body {
   .banner-3 {
     grid-template-columns: 1fr;
     min-height: auto;
+    max-height: none;
   }
 
   .banner-3 .video-side {
@@ -416,13 +418,16 @@ body {
   aspect-ratio: 21/9;
   position: relative;
   overflow: hidden;
+  max-height: 80vh;
 }
 
 /* Banner 3 — split layout */
 .banner-3 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 600px;
+  position: relative;
+  min-height: 500px;
+  max-height: 700px;
 }
 
 .banner-3 .video-side {

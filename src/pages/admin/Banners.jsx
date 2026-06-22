@@ -166,6 +166,17 @@ export default function AdminBanners() {
                 >
                   {saving[slot.key] ? 'saving...' : 'save banner'}
                 </button>
+                {banners[slot.key].videoUrl && (
+                  <button
+                    onClick={() => {
+                      setBanners(prev => ({ ...prev, [slot.key]: { ...prev[slot.key], videoUrl: '' } }))
+                      setMessages(prev => ({ ...prev, [slot.key]: 'video removed. save to apply.' }))
+                    }}
+                    className="text-[#FF2D78] text-xs hover:underline transition"
+                  >
+                    remove video
+                  </button>
+                )}
               </div>
 
               {messages[slot.key] && (
