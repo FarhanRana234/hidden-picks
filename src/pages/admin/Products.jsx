@@ -219,7 +219,31 @@ export default function AdminProducts() {
 
           <div>
             <label className="block text-xs font-semibold text-[#999] mb-1">Images (up to 5)</label>
-            <input type="file" multiple accept="image/*" onChange={e => setFiles([...e.target.files])} className="text-sm text-[#999]" />
+            <div className="flex items-center gap-3">
+              <label className="cursor-pointer bg-[#0A0A0A] border border-[#222] text-[#999] px-4 py-2 text-sm rounded hover:text-white hover:border-[#FF2D78] transition">
+                Choose images
+                <input type="file" multiple accept="image/*" className="hidden" onChange={e => {
+                  const newFiles = Array.from(e.target.files)
+                  setFiles(prev => [...prev, ...newFiles].slice(0, 5))
+                  e.target.value = ''
+                }} />
+              </label>
+              {files.length > 0 && (
+                <span className="text-xs text-[#999]">{files.length}/5 selected</span>
+              )}
+            </div>
+            {files.length > 0 && (
+              <div className="flex gap-2 mt-3 flex-wrap">
+                {files.map((f, i) => (
+                  <div key={i} className="relative w-16 h-16 bg-[#0A0A0A] border border-[#222] rounded overflow-hidden group">
+                    <img src={URL.createObjectURL(f)} alt="" className="w-full h-full object-cover" />
+                    <button type="button" onClick={() => setFiles(prev => prev.filter((_, j) => j !== i))} className="absolute top-0.5 right-0.5 w-5 h-5 bg-red-900/80 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex gap-3">
