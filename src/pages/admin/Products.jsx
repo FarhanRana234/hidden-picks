@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext'
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../../firebase/products'
 import { uploadToCloudinary } from '../../firebase/cloudinary'
 
+const brandList = ['Sony', 'Canon', 'Fujifilm', 'Nikon', 'Kodak', 'Samsung', 'Vashica', 'Polaroid', 'Sanyo', 'Olympus', 'Casio']
+
 export default function AdminProducts() {
   const { user, loading } = useAuth()
   const navigate = useNavigate()
@@ -106,14 +108,14 @@ export default function AdminProducts() {
       resetForm()
       getProducts().then(setProducts)
     } catch (err) {
-      alert('Error saving product: ' + err.message)
+      alert('error saving product: ' + err.message)
     } finally {
       setSaving(false)
     }
   }
 
   async function handleDelete(id) {
-    if (!confirm('Delete this product?')) return
+    if (!confirm('delete this product?')) return
     await deleteProduct(id)
     getProducts().then(setProducts)
   }
@@ -123,160 +125,159 @@ export default function AdminProducts() {
     getProducts().then(setProducts)
   }
 
-  if (loading) return <div className="p-8 text-center text-dark/50">Loading...</div>
+  if (loading) return <div className="p-8 text-center text-[#555]">Loading...</div>
 
   return (
-    <div className="min-h-screen bg-cream">
-      <nav className="bg-dark text-white px-4 py-3 flex items-center justify-between">
-        <Link to="/admin" className="font-heading font-bold text-lg">Hidden Picks Admin</Link>
-        <div className="flex items-center gap-4 text-sm">
-          <Link to="/admin/orders" className="hover:text-accent transition">Orders</Link>
-          <Link to="/admin/settings" className="hover:text-accent transition">Settings</Link>
-          <Link to="/" className="hover:text-accent transition">View Store</Link>
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
+      <nav className="bg-[#111] text-white px-4 py-3 flex items-center justify-between border-b border-[#222]">
+        <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
+        <div className="flex items-center gap-4 text-sm text-[#999]">
+          <Link to="/admin/orders" className="hover:text-[#FF2D78] transition">orders</Link>
+          <Link to="/admin/settings" className="hover:text-[#FF2D78] transition">settings</Link>
+          <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
         </div>
       </nav>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-heading text-3xl font-bold">Products</h1>
-          <button onClick={() => { resetForm(); setShowForm(true) }} className="bg-dark text-white px-6 py-2 text-sm font-semibold uppercase tracking-wider hover:bg-accent transition">
-            + Add Product
+          <h1 className="font-heading text-3xl font-bold lowercase">products</h1>
+          <button onClick={() => { resetForm(); setShowForm(true) }} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition">
+            + add product
           </button>
         </div>
 
         {showForm && (
-          <form onSubmit={handleSubmit} className="bg-white p-6 shadow-sm mb-8 space-y-4">
-            <h2 className="font-heading text-xl font-bold mb-4">{editing ? 'Edit Product' : 'Add Product'}</h2>
+          <form onSubmit={handleSubmit} className="bg-[#111] border border-[#222] p-6 rounded-lg mb-8 space-y-4">
+            <h2 className="font-heading text-xl font-bold mb-4">{editing ? 'edit product' : 'add product'}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold mb-1">Name *</label>
-                <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required className="w-full border border-dark/20 px-3 py-2 text-sm" />
+                <label className="block text-xs font-semibold text-[#999] mb-1">name *</label>
+                <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Slug (auto from name)</label>
-                <input value={slug} onChange={e => setSlug(e.target.value)} className="w-full border border-dark/20 px-3 py-2 text-sm" />
+                <label className="block text-xs font-semibold text-[#999] mb-1">slug (auto from name)</label>
+                <input value={slug} onChange={e => setSlug(e.target.value)} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Brand *</label>
-                <input value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} required className="w-full border border-dark/20 px-3 py-2 text-sm" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold mb-1">Era</label>
-                <select value={form.era} onChange={e => setForm({ ...form, era: e.target.value })} className="w-full border border-dark/20 bg-white px-3 py-2 text-sm">
-                  <option value="">Select</option>
-                  <option value="Y2K 2000-2006">Y2K 2000-2006</option>
-                  <option value="Vintage pre-2000">Vintage pre-2000</option>
-                  <option value="Modern">Modern</option>
+                <label className="block text-xs font-semibold text-[#999] mb-1">brand *</label>
+                <select value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
+                  <option value="" className="bg-[#0A0A0A]">select brand</option>
+                  {brandList.map(b => <option key={b} value={b} className="bg-[#0A0A0A]">{b}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Condition</label>
-                <select value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value })} className="w-full border border-dark/20 bg-white px-3 py-2 text-sm">
-                  <option value="">Select</option>
-                  <option value="Like New">Like New</option>
-                  <option value="Good">Good</option>
-                  <option value="Fair">Fair</option>
+                <label className="block text-xs font-semibold text-[#999] mb-1">era</label>
+                <select value={form.era} onChange={e => setForm({ ...form, era: e.target.value })} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
+                  <option value="" className="bg-[#0A0A0A]">select</option>
+                  <option value="Y2K (2000–2006)" className="bg-[#0A0A0A]">Y2K (2000–2006)</option>
+                  <option value="Vintage (pre-2000)" className="bg-[#0A0A0A]">Vintage (pre-2000)</option>
+                  <option value="Modern (2007+)" className="bg-[#0A0A0A]">Modern (2007+)</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold mb-1">Price (PKR) *</label>
-                <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} required className="w-full border border-dark/20 px-3 py-2 text-sm" />
+                <label className="block text-xs font-semibold text-[#999] mb-1">condition</label>
+                <select value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value })} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
+                  <option value="" className="bg-[#0A0A0A]">select</option>
+                  <option value="Like New" className="bg-[#0A0A0A]">Like New</option>
+                  <option value="Good" className="bg-[#0A0A0A]">Good</option>
+                  <option value="Fair" className="bg-[#0A0A0A]">Fair</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#999] mb-1">price (pkr) *</label>
+                <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold mb-1">Description</label>
-              <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} className="w-full border border-dark/20 px-3 py-2 text-sm" />
+              <label className="block text-xs font-semibold text-[#999] mb-1">description</label>
+              <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
             </div>
 
-            {/* Specs */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-semibold">Specifications</label>
-                <button type="button" onClick={addSpec} className="text-xs text-accent hover:underline">+ Add Spec</button>
+                <label className="text-xs font-semibold text-[#999]">specifications</label>
+                <button type="button" onClick={addSpec} className="text-xs text-[#FF2D78] hover:underline">+ add spec</button>
               </div>
               <div className="space-y-2">
                 {Object.entries(form.specs).map(([key, val]) => (
                   <div key={key} className="flex gap-2 items-center">
-                    <input value={key} onChange={e => handleSpecKeyChange(key, e.target.value)} placeholder="Key (e.g. Megapixels)" className="flex-1 border border-dark/20 px-3 py-1.5 text-sm" />
-                    <input value={val} onChange={e => handleSpecValueChange(key, e.target.value)} placeholder="Value (e.g. 10MP)" className="flex-1 border border-dark/20 px-3 py-1.5 text-sm" />
-                    <button type="button" onClick={() => removeSpec(key)} className="text-red-500 text-xs hover:underline">Remove</button>
+                    <input value={key} onChange={e => handleSpecKeyChange(key, e.target.value)} placeholder="key (e.g. megapixels)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
+                    <input value={val} onChange={e => handleSpecValueChange(key, e.target.value)} placeholder="value (e.g. 10mp)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
+                    <button type="button" onClick={() => removeSpec(key)} className="text-[#FF2D78] text-xs hover:underline">remove</button>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Toggles */}
             <div className="flex flex-wrap gap-6">
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={form.isUnique} onChange={e => setForm({ ...form, isUnique: e.target.checked })} className="accent-accent" />
-                Unique item (max qty 1)
+              <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
+                <input type="checkbox" checked={form.isUnique} onChange={e => setForm({ ...form, isUnique: e.target.checked })} className="accent-[#FF2D78]" />
+                unique item (max qty 1)
               </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={form.isSoldOut} onChange={e => setForm({ ...form, isSoldOut: e.target.checked })} className="accent-accent" />
-                Sold Out
+              <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
+                <input type="checkbox" checked={form.isSoldOut} onChange={e => setForm({ ...form, isSoldOut: e.target.checked })} className="accent-[#FF2D78]" />
+                sold out
               </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
-                <input type="checkbox" checked={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.checked })} className="accent-accent" />
-                Active
+              <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
+                <input type="checkbox" checked={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.checked })} className="accent-[#FF2D78]" />
+                active
               </label>
             </div>
 
-            {/* Images */}
             <div>
-              <label className="block text-xs font-semibold mb-1">Images (up to 5)</label>
-              <input type="file" multiple accept="image/*" onChange={e => setFiles([...e.target.files])} className="text-sm" />
+              <label className="block text-xs font-semibold text-[#999] mb-1">images (up to 5)</label>
+              <input type="file" multiple accept="image/*" onChange={e => setFiles([...e.target.files])} className="text-sm text-[#999]" />
             </div>
 
             <div className="flex gap-3">
-              <button type="submit" disabled={saving} className="bg-dark text-white px-6 py-2 text-sm font-semibold uppercase tracking-wider hover:bg-accent transition disabled:opacity-50">
-                {saving ? 'Saving...' : editing ? 'Update Product' : 'Add Product'}
+              <button type="submit" disabled={saving} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition disabled:opacity-50">
+                {saving ? 'saving...' : editing ? 'update product' : 'add product'}
               </button>
-              <button type="button" onClick={resetForm} className="border border-dark/20 px-6 py-2 text-sm hover:bg-dark/5">Cancel</button>
+              <button type="button" onClick={resetForm} className="border border-[#222] text-[#999] px-6 py-2 text-sm rounded hover:text-white">cancel</button>
             </div>
           </form>
         )}
 
-        {/* Table */}
-        <div className="bg-white shadow-sm overflow-x-auto">
+        <div className="bg-[#111] border border-[#222] rounded-lg overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-dark text-white text-xs uppercase tracking-wider">
+            <thead className="bg-[#0A0A0A] text-[#999] text-xs uppercase tracking-wider">
               <tr>
-                <th className="p-3 text-left">Image</th>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Price</th>
-                <th className="p-3 text-left">Condition</th>
-                <th className="p-3 text-left">Status</th>
-                <th className="p-3 text-left">Actions</th>
+                <th className="p-3 text-left">image</th>
+                <th className="p-3 text-left">name</th>
+                <th className="p-3 text-left">price</th>
+                <th className="p-3 text-left">condition</th>
+                <th className="p-3 text-left">status</th>
+                <th className="p-3 text-left">actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-dark/5">
+            <tbody className="divide-y divide-[#222]">
               {products.map(p => (
-                <tr key={p.id} className="hover:bg-cream/50">
+                <tr key={p.id} className="hover:bg-[#0A0A0A]">
                   <td className="p-3">
-                    <div className="w-10 h-10 bg-cream overflow-hidden">
+                    <div className="w-10 h-10 bg-[#0A0A0A] rounded overflow-hidden">
                       {p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}
                     </div>
                   </td>
                   <td className="p-3 font-semibold">{p.name}</td>
                   <td className="p-3">{formatPrice(p.price)}</td>
-                  <td className="p-3 text-xs uppercase">{p.condition}</td>
+                  <td className="p-3 text-xs uppercase text-[#999]">{p.condition}</td>
                   <td className="p-3">
-                    <button onClick={() => toggleSoldOut(p.id, p.isSoldOut)} className={`text-xs px-2 py-0.5 font-semibold uppercase ${p.isSoldOut ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                      {p.isSoldOut ? 'Sold Out' : 'Active'}
+                    <button onClick={() => toggleSoldOut(p.id, p.isSoldOut)} className={`text-xs px-2 py-0.5 font-semibold uppercase rounded ${p.isSoldOut ? 'bg-red-900/30 text-red-400' : 'bg-green-900/30 text-green-400'}`}>
+                      {p.isSoldOut ? 'sold out' : 'active'}
                     </button>
                   </td>
                   <td className="p-3">
                     <div className="flex gap-2">
-                      <button onClick={() => openEdit(p)} className="text-xs text-accent hover:underline">Edit</button>
-                      <button onClick={() => handleDelete(p.id)} className="text-xs text-red-500 hover:underline">Delete</button>
+                      <button onClick={() => openEdit(p)} className="text-xs text-[#FF2D78] hover:underline">edit</button>
+                      <button onClick={() => handleDelete(p.id)} className="text-xs text-red-400 hover:underline">delete</button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {products.length === 0 && <p className="p-8 text-center text-dark/40">No products yet.</p>}
+          {products.length === 0 && <p className="p-8 text-center text-[#555]">no products yet.</p>}
         </div>
       </div>
     </div>

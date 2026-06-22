@@ -1,8 +1,11 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import AnnouncementBanner from './components/AnnouncementBanner'
+import WhatsAppFloat from './components/WhatsAppFloat'
 import Home from './pages/Home'
 import Shop from './pages/Shop'
+import Budget from './pages/Budget'
 import Product from './pages/Product'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
@@ -20,11 +23,13 @@ export default function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/*" element={
           <>
+            <AnnouncementBanner />
             <Navbar />
             <main className="flex-1">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/shop" element={<Shop />} />
+                <Route path="/budget" element={<Budget />} />
                 <Route path="/product/:slug" element={<Product />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
@@ -36,6 +41,7 @@ export default function App() {
               </Routes>
             </main>
             <Footer />
+            <WhatsAppFloat />
           </>
         } />
       </Routes>

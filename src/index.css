@@ -1,34 +1,90 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #F5F0E8;
-  --color-dark: #1A1A1A;
-  --color-accent: #C8963E;
-  --color-text: #2C2C2A;
-  --font-heading: "Playfair Display", serif;
+  --color-dark: #0A0A0A;
+  --color-surface: #111111;
+  --color-accent: #FF2D78;
+  --color-accent2: #FFD700;
+  --color-text: #FFFFFF;
+  --color-muted: #999999;
+  --color-border: #222222;
+  --font-heading: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
 }
 
 body {
-  background-color: var(--color-cream);
+  background-color: var(--color-dark);
   color: var(--color-text);
   font-family: var(--font-body);
 }
 
+/* Grain overlay */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Corner brackets */
 .corner-bracket::before,
 .corner-bracket::after {
   content: '';
   position: absolute;
   width: 40px;
   height: 40px;
-  border-color: var(--color-accent);
+  border-color: #FF2D78;
   border-style: solid;
 }
 .corner-bracket::before {
-  top: 0; left: 0;
+  top: 20px; left: 20px;
   border-width: 3px 0 0 3px;
 }
 .corner-bracket::after {
-  bottom: 0; right: 0;
+  bottom: 20px; right: 20px;
   border-width: 0 3px 3px 0;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+}
+
+/* Pulse animation for WhatsApp float */
+@keyframes pulse-wa {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0A0A0A; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+/* Range slider styling */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #FF2D78;
+  cursor: pointer;
 }

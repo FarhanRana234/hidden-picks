@@ -25,29 +25,29 @@ export default function AdminDashboard() {
     })
   }, [user, loading, navigate])
 
-  if (loading) return <div className="p-8 text-center text-dark/50">Loading...</div>
+  if (loading) return <div className="p-8 text-center text-[#555]">Loading...</div>
 
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-[#0A0A0A] text-white">
       <AdminNav logout={logout} />
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="font-heading text-3xl font-bold mb-8">Dashboard</h1>
+        <h1 className="font-heading text-3xl font-bold mb-8 lowercase">dashboard</h1>
 
         {settings?.announcementBanner?.show && (
-          <div className="bg-accent/10 border border-accent/30 text-sm p-3 mb-8 text-center">{settings.announcementBanner.text}</div>
+          <div className="bg-[#FF2D78]/10 border border-[#FF2D78]/30 text-sm p-3 mb-8 text-center rounded">{settings.announcementBanner.text}</div>
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Total Products" value={stats.products} />
-          <StatCard label="Active Listings" value={stats.active} />
-          <StatCard label="Sold Out" value={stats.soldOut} />
-          <StatCard label="Total Orders" value={stats.orders} />
+          <StatCard label="total products" value={stats.products} />
+          <StatCard label="active listings" value={stats.active} />
+          <StatCard label="sold out" value={stats.soldOut} />
+          <StatCard label="total orders" value={stats.orders} />
         </div>
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Link to="/admin/products" className="bg-dark text-white p-6 text-center font-heading text-xl font-bold hover:bg-accent transition">Manage Products</Link>
-          <Link to="/admin/orders" className="bg-dark text-white p-6 text-center font-heading text-xl font-bold hover:bg-accent transition">Manage Orders</Link>
-          <Link to="/admin/settings" className="bg-dark text-white p-6 text-center font-heading text-xl font-bold hover:bg-accent transition">Store Settings</Link>
+          <Link to="/admin/products" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">manage products</Link>
+          <Link to="/admin/orders" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">manage orders</Link>
+          <Link to="/admin/settings" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">store settings</Link>
         </div>
       </div>
     </div>
@@ -56,11 +56,11 @@ export default function AdminDashboard() {
 
 function AdminNav({ logout }) {
   return (
-    <nav className="bg-dark text-white px-4 py-3 flex items-center justify-between">
-      <Link to="/admin" className="font-heading font-bold text-lg">Hidden Picks Admin</Link>
-      <div className="flex items-center gap-4 text-sm">
-        <Link to="/" className="hover:text-accent transition">View Store</Link>
-        <button onClick={logout} className="hover:text-accent transition">Logout</button>
+    <nav className="bg-[#111] text-white px-4 py-3 flex items-center justify-between border-b border-[#222]">
+      <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
+      <div className="flex items-center gap-4 text-sm text-[#999]">
+        <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
+        <button onClick={logout} className="hover:text-[#FF2D78] transition">logout</button>
       </div>
     </nav>
   )
@@ -68,9 +68,9 @@ function AdminNav({ logout }) {
 
 function StatCard({ label, value }) {
   return (
-    <div className="bg-white p-4 shadow-sm text-center">
-      <p className="font-heading text-3xl font-bold text-accent">{value}</p>
-      <p className="text-xs uppercase tracking-wider text-dark/60 mt-1">{label}</p>
+    <div className="bg-[#111] border border-[#222] p-4 rounded-lg text-center">
+      <p className="font-heading text-3xl font-bold text-[#FF2D78]">{value}</p>
+      <p className="text-xs uppercase tracking-wider text-[#999] mt-1">{label}</p>
     </div>
   )
 }
