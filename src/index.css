@@ -333,12 +333,6 @@ body {
     gap: 4px;
   }
 
-  .pack-order-steps {
-    flex-direction: column;
-    gap: 16px;
-    padding: 0 16px;
-  }
-
   section:not(.banner-2):not(.banner-3):not(.hero) {
     padding: 48px 16px;
   }

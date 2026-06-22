@@ -178,26 +178,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pack an Order With Me */}
-      <section className="py-16 px-4 bg-[#111]">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold mb-10">Pack an Order With Me 📦</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { num: '01', title: 'Browse & Pick', desc: 'Find your perfect digicam from our curated collection.' },
-              { num: '02', title: 'Order via WhatsApp', desc: 'Message us on WhatsApp or place order directly on site.' },
-              { num: '03', title: 'Packed & Shipped With Love', desc: 'We carefully pack and ship your camera across Pakistan.' },
-            ].map(s => (
-              <div key={s.num} className="bg-[#0A0A0A] border border-[#222] rounded-lg p-6">
-                <span className="text-[#FF2D78] font-heading text-3xl font-bold block mb-3">{s.num}</span>
-                <h4 className="font-heading text-lg font-bold mb-2">{s.title}</h4>
-                <p className="text-sm text-[#999]">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Instagram Grid */}
       <section className="py-16 md:py-24 px-4">
         <div className="max-w-5xl mx-auto text-center">
