@@ -44,10 +44,11 @@ export default function AdminDashboard() {
           <StatCard label="total orders" value={stats.orders} />
         </div>
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Link to="/admin/products" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">manage products</Link>
-          <Link to="/admin/orders" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">manage orders</Link>
-          <Link to="/admin/settings" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">store settings</Link>
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <Link to="/admin/products" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">products</Link>
+          <Link to="/admin/orders" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">orders</Link>
+          <Link to="/admin/banners" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">banners</Link>
+          <Link to="/admin/settings" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">settings</Link>
         </div>
       </div>
     </div>
@@ -58,10 +59,11 @@ function AdminNav({ logout }) {
   return (
     <nav className="bg-[#111] text-white px-4 py-3 flex items-center justify-between border-b border-[#222]">
       <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
-      <div className="flex items-center gap-4 text-sm text-[#999]">
-        <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
-        <button onClick={logout} className="hover:text-[#FF2D78] transition">logout</button>
-      </div>
+        <div className="flex items-center gap-4 text-sm text-[#999]">
+          <Link to="/admin/banners" className="hover:text-[#FF2D78] transition">banners</Link>
+          <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
+          <button onClick={logout} className="hover:text-[#FF2D78] transition">logout</button>
+        </div>
     </nav>
   )
 }

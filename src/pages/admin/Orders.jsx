@@ -34,6 +34,7 @@ export default function AdminOrders() {
         <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
         <div className="flex items-center gap-4 text-sm text-[#999]">
           <Link to="/admin/products" className="hover:text-[#FF2D78] transition">products</Link>
+          <Link to="/admin/banners" className="hover:text-[#FF2D78] transition">banners</Link>
           <Link to="/admin/settings" className="hover:text-[#FF2D78] transition">settings</Link>
           <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
         </div>

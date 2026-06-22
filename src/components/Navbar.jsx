@@ -6,7 +6,6 @@ const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER
 
 const links = [
   { to: '/shop', label: 'Shop' },
-  { to: '/shop', label: 'Brands' },
   { to: '/', label: 'About' },
   { to: '/budget', label: 'Budget Picks' },
 ]
