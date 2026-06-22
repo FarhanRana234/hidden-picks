@@ -177,6 +177,10 @@ body {
     text-align: center;
   }
 
+  .hero video {
+    object-fit: contain;
+  }
+
   .hero h1 {
     font-size: 38px;
     line-height: 1.15;
