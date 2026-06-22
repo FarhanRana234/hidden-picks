@@ -48,6 +48,7 @@ export default function AdminDashboard() {
           <Link to="/admin/products" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">products</Link>
           <Link to="/admin/orders" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">orders</Link>
           <Link to="/admin/banners" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">banners</Link>
+          <Link to="/admin/instagram" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">instagram</Link>
           <Link to="/admin/settings" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">settings</Link>
         </div>
       </div>
@@ -61,6 +62,7 @@ function AdminNav({ logout }) {
       <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
         <div className="flex items-center gap-4 text-sm text-[#999]">
           <Link to="/admin/banners" className="hover:text-[#FF2D78] transition">banners</Link>
+          <Link to="/admin/instagram" className="hover:text-[#FF2D78] transition">instagram</Link>
           <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
           <button onClick={logout} className="hover:text-[#FF2D78] transition">logout</button>
         </div>

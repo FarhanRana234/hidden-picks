@@ -80,7 +80,7 @@ export default function AdminBanners() {
   const slots = [
     { key: 'banner1', label: 'Banner 1 — "The Flip Era"' },
     { key: 'banner2', label: 'Banner 2 — "Shoot Like It\'s 2004"' },
-    { key: 'banner3', label: 'Banner 3 — "Every Shot Tells a Story"' },
+    { key: 'banner3', label: 'Banner 3 — "Every Shot Tells a Story" (4:3 or 1:1 recommended)' },
   ]
 
   if (authLoading) return <div className="p-8 text-center text-[#555]">Loading...</div>
@@ -93,13 +93,19 @@ export default function AdminBanners() {
           <Link to="/admin/products" className="hover:text-[#FF2D78] transition">products</Link>
           <Link to="/admin/orders" className="hover:text-[#FF2D78] transition">orders</Link>
           <Link to="/admin/settings" className="hover:text-[#FF2D78] transition">settings</Link>
+          <Link to="/admin/instagram" className="hover:text-[#FF2D78] transition">instagram</Link>
           <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
         </div>
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <h1 className="font-heading text-3xl font-bold mb-2">Video Banners</h1>
-        <p className="text-[#999] text-sm mb-8">manage the 3 homepage video banners. upload .mp4 files (max 50MB each).</p>
+        <p className="text-[#999] text-sm mb-8">Manage the 3 homepage video banners. Upload .mp4 files (max 50MB each).</p>
+        <div className="bg-[#111] border border-[#222] rounded-lg p-4 mb-8 text-sm text-[#999] space-y-1">
+          <p><strong className="text-white">Banner 1 (Hero background):</strong> 16:9 landscape, 1920x1080+, close-up digicam footage</p>
+          <p><strong className="text-white">Banner 2 (Full-width cinematic):</strong> 21:9 ultrawide, 2560x1080+, lifestyle/city footage</p>
+          <p><strong className="text-white">Banner 3 (Split right side):</strong> 4:3 or 1:1, 1080x1080+, close-up unboxing/details</p>
+        </div>
 
         <div className="space-y-8">
           {slots.map(slot => (

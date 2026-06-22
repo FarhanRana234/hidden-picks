@@ -15,6 +15,7 @@ import AdminDashboard from './pages/admin/Dashboard'
 import AdminProducts from './pages/admin/Products'
 import AdminOrders from './pages/admin/Orders'
 import AdminBanners from './pages/admin/Banners'
+import AdminInstagram from './pages/admin/Instagram'
 import AdminSettings from './pages/admin/Settings'
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin/orders" element={<AdminOrders />} />
                 <Route path="/admin/banners" element={<AdminBanners />} />
+                <Route path="/admin/instagram" element={<AdminInstagram />} />
                 <Route path="/admin/settings" element={<AdminSettings />} />
               </Routes>
             </main>
