@@ -108,14 +108,14 @@ export default function AdminProducts() {
       resetForm()
       getProducts().then(setProducts)
     } catch (err) {
-      alert('error saving product: ' + err.message)
+      alert('Error saving product: ' + err.message)
     } finally {
       setSaving(false)
     }
   }
 
   async function handleDelete(id) {
-    if (!confirm('delete this product?')) return
+    if (!confirm('Delete this product?')) return
     await deleteProduct(id)
     getProducts().then(setProducts)
   }
@@ -128,159 +128,146 @@ export default function AdminProducts() {
   if (loading) return <div className="p-8 text-center text-[#555]">Loading...</div>
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white">
-      <nav className="bg-[#111] text-white px-4 py-3 flex items-center justify-between border-b border-[#222]">
-        <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
-        <div className="flex items-center gap-4 text-sm text-[#999]">
-          <Link to="/admin/orders" className="hover:text-[#FF2D78] transition">orders</Link>
-          <Link to="/admin/banners" className="hover:text-[#FF2D78] transition">banners</Link>
-          <Link to="/admin/settings" className="hover:text-[#FF2D78] transition">settings</Link>
-          <Link to="/admin/instagram" className="hover:text-[#FF2D78] transition">instagram</Link>
-          <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
-        </div>
-      </nav>
+    <div className="px-6 py-8">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="font-heading text-3xl font-bold">Products</h1>
+        <button onClick={() => { resetForm(); setShowForm(true) }} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition">
+          + Add Product
+        </button>
+      </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="font-heading text-3xl font-bold">Products</h1>
-          <button onClick={() => { resetForm(); setShowForm(true) }} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition">
-            + add product
-          </button>
-        </div>
-
-        {showForm && (
-          <form onSubmit={handleSubmit} className="bg-[#111] border border-[#222] p-6 rounded-lg mb-8 space-y-4">
-            <h2 className="font-heading text-xl font-bold mb-4">{editing ? 'edit product' : 'add product'}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#999] mb-1">name *</label>
-                <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#999] mb-1">slug (auto from name)</label>
-                <input value={slug} onChange={e => setSlug(e.target.value)} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#999] mb-1">brand *</label>
-                <select value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
-                  <option value="" className="bg-[#0A0A0A]">select brand</option>
-                  {brandList.map(b => <option key={b} value={b} className="bg-[#0A0A0A]">{b}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#999] mb-1">era</label>
-                <select value={form.era} onChange={e => setForm({ ...form, era: e.target.value })} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
-                  <option value="" className="bg-[#0A0A0A]">select</option>
-                  <option value="Y2K (2000–2006)" className="bg-[#0A0A0A]">Y2K (2000–2006)</option>
-                  <option value="Vintage (pre-2000)" className="bg-[#0A0A0A]">Vintage (pre-2000)</option>
-                  <option value="Modern (2007+)" className="bg-[#0A0A0A]">Modern (2007+)</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#999] mb-1">condition</label>
-                <select value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value })} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
-                  <option value="" className="bg-[#0A0A0A]">select</option>
-                  <option value="Like New" className="bg-[#0A0A0A]">Like New</option>
-                  <option value="Good" className="bg-[#0A0A0A]">Good</option>
-                  <option value="Fair" className="bg-[#0A0A0A]">Fair</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#999] mb-1">price (pkr) *</label>
-                <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
-              </div>
-            </div>
-
+      {showForm && (
+        <form onSubmit={handleSubmit} className="bg-[#111] border border-[#222] p-6 rounded-lg mb-8 space-y-4">
+          <h2 className="font-heading text-xl font-bold mb-4">{editing ? 'Edit Product' : 'Add Product'}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#999] mb-1">description</label>
-              <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
+              <label className="block text-xs font-semibold text-[#999] mb-1">Name *</label>
+              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
             </div>
-
             <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-semibold text-[#999]">specifications</label>
-                <button type="button" onClick={addSpec} className="text-xs text-[#FF2D78] hover:underline">+ add spec</button>
-              </div>
-              <div className="space-y-2">
-                {Object.entries(form.specs).map(([key, val]) => (
-                  <div key={key} className="flex gap-2 items-center">
-                    <input value={key} onChange={e => handleSpecKeyChange(key, e.target.value)} placeholder="key (e.g. megapixels)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
-                    <input value={val} onChange={e => handleSpecValueChange(key, e.target.value)} placeholder="value (e.g. 10mp)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
-                    <button type="button" onClick={() => removeSpec(key)} className="text-[#FF2D78] text-xs hover:underline">remove</button>
-                  </div>
-                ))}
-              </div>
+              <label className="block text-xs font-semibold text-[#999] mb-1">Slug (auto from name)</label>
+              <input value={slug} onChange={e => setSlug(e.target.value)} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
             </div>
-
-            <div className="flex flex-wrap gap-6">
-              <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
-                <input type="checkbox" checked={form.isUnique} onChange={e => setForm({ ...form, isUnique: e.target.checked })} className="accent-[#FF2D78]" />
-                unique item (max qty 1)
-              </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
-                <input type="checkbox" checked={form.isSoldOut} onChange={e => setForm({ ...form, isSoldOut: e.target.checked })} className="accent-[#FF2D78]" />
-                sold out
-              </label>
-              <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
-                <input type="checkbox" checked={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.checked })} className="accent-[#FF2D78]" />
-                active
-              </label>
-            </div>
-
             <div>
-              <label className="block text-xs font-semibold text-[#999] mb-1">images (up to 5)</label>
-              <input type="file" multiple accept="image/*" onChange={e => setFiles([...e.target.files])} className="text-sm text-[#999]" />
+              <label className="block text-xs font-semibold text-[#999] mb-1">Brand *</label>
+              <select value={form.brand} onChange={e => setForm({ ...form, brand: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
+                <option value="" className="bg-[#0A0A0A]">Select brand</option>
+                {brandList.map(b => <option key={b} value={b} className="bg-[#0A0A0A]">{b}</option>)}
+              </select>
             </div>
-
-            <div className="flex gap-3">
-              <button type="submit" disabled={saving} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition disabled:opacity-50">
-                {saving ? 'saving...' : editing ? 'update product' : 'add product'}
-              </button>
-              <button type="button" onClick={resetForm} className="border border-[#222] text-[#999] px-6 py-2 text-sm rounded hover:text-white">cancel</button>
+            <div>
+              <label className="block text-xs font-semibold text-[#999] mb-1">Era</label>
+              <select value={form.era} onChange={e => setForm({ ...form, era: e.target.value })} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
+                <option value="" className="bg-[#0A0A0A]">Select</option>
+                <option value="Y2K (2000–2006)" className="bg-[#0A0A0A]">Y2K (2000–2006)</option>
+                <option value="Vintage (pre-2000)" className="bg-[#0A0A0A]">Vintage (pre-2000)</option>
+                <option value="Modern (2007+)" className="bg-[#0A0A0A]">Modern (2007+)</option>
+              </select>
             </div>
-          </form>
-        )}
+            <div>
+              <label className="block text-xs font-semibold text-[#999] mb-1">Condition</label>
+              <select value={form.condition} onChange={e => setForm({ ...form, condition: e.target.value })} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded">
+                <option value="" className="bg-[#0A0A0A]">Select</option>
+                <option value="Like New" className="bg-[#0A0A0A]">Like New</option>
+                <option value="Good" className="bg-[#0A0A0A]">Good</option>
+                <option value="Fair" className="bg-[#0A0A0A]">Fair</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#999] mb-1">Price (PKR) *</label>
+              <input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} required className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
+            </div>
+          </div>
 
-        <div className="bg-[#111] border border-[#222] rounded-lg overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[#0A0A0A] text-[#999] text-xs tracking-wider">
-              <tr>
-                <th className="p-3 text-left">image</th>
-                <th className="p-3 text-left">name</th>
-                <th className="p-3 text-left">price</th>
-                <th className="p-3 text-left">condition</th>
-                <th className="p-3 text-left">status</th>
-                <th className="p-3 text-left">actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#222]">
-              {products.map(p => (
-                <tr key={p.id} className="hover:bg-[#0A0A0A]">
-                  <td className="p-3">
-                    <div className="w-10 h-10 bg-[#0A0A0A] rounded overflow-hidden">
-                      {p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}
-                    </div>
-                  </td>
-                  <td className="p-3 font-semibold">{p.name}</td>
-                  <td className="p-3">{formatPrice(p.price)}</td>
-                  <td className="p-3 text-xs text-[#999]">{p.condition}</td>
-                  <td className="p-3">
-                    <button onClick={() => toggleSoldOut(p.id, p.isSoldOut)} className={`text-xs px-2 py-0.5 font-semibold rounded ${p.isSoldOut ? 'bg-red-900/30 text-red-400' : 'bg-green-900/30 text-green-400'}`}>
-                      {p.isSoldOut ? 'sold out' : 'active'}
-                    </button>
-                  </td>
-                  <td className="p-3">
-                    <div className="flex gap-2">
-                      <button onClick={() => openEdit(p)} className="text-xs text-[#FF2D78] hover:underline">edit</button>
-                      <button onClick={() => handleDelete(p.id)} className="text-xs text-red-400 hover:underline">delete</button>
-                    </div>
-                  </td>
-                </tr>
+          <div>
+            <label className="block text-xs font-semibold text-[#999] mb-1">Description</label>
+            <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} className="w-full bg-[#0A0A0A] border border-[#222] text-white px-3 py-2 text-sm rounded" />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-semibold text-[#999]">Specifications</label>
+              <button type="button" onClick={addSpec} className="text-xs text-[#FF2D78] hover:underline">+ Add spec</button>
+            </div>
+            <div className="space-y-2">
+              {Object.entries(form.specs).map(([key, val]) => (
+                <div key={key} className="flex gap-2 items-center">
+                  <input value={key} onChange={e => handleSpecKeyChange(key, e.target.value)} placeholder="Key (e.g. Megapixels)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
+                  <input value={val} onChange={e => handleSpecValueChange(key, e.target.value)} placeholder="Value (e.g. 10MP)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
+                  <button type="button" onClick={() => removeSpec(key)} className="text-[#FF2D78] text-xs hover:underline">Remove</button>
+                </div>
               ))}
-            </tbody>
-          </table>
-          {products.length === 0 && <p className="p-8 text-center text-[#555]">no products yet.</p>}
-        </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-6">
+            <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
+              <input type="checkbox" checked={form.isUnique} onChange={e => setForm({ ...form, isUnique: e.target.checked })} className="accent-[#FF2D78]" />
+              Unique item (max qty 1)
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
+              <input type="checkbox" checked={form.isSoldOut} onChange={e => setForm({ ...form, isSoldOut: e.target.checked })} className="accent-[#FF2D78]" />
+              Sold out
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
+              <input type="checkbox" checked={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.checked })} className="accent-[#FF2D78]" />
+              Active
+            </label>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-[#999] mb-1">Images (up to 5)</label>
+            <input type="file" multiple accept="image/*" onChange={e => setFiles([...e.target.files])} className="text-sm text-[#999]" />
+          </div>
+
+          <div className="flex gap-3">
+            <button type="submit" disabled={saving} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition disabled:opacity-50">
+              {saving ? 'Saving...' : editing ? 'Update Product' : 'Add Product'}
+            </button>
+            <button type="button" onClick={resetForm} className="border border-[#222] text-[#999] px-6 py-2 text-sm rounded hover:text-white">Cancel</button>
+          </div>
+        </form>
+      )}
+
+      <div className="bg-[#111] border border-[#222] rounded-lg overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-[#0A0A0A] text-[#999] text-xs tracking-wider">
+            <tr>
+              <th className="p-3 text-left">Image</th>
+              <th className="p-3 text-left">Name</th>
+              <th className="p-3 text-left">Price</th>
+              <th className="p-3 text-left">Condition</th>
+              <th className="p-3 text-left">Status</th>
+              <th className="p-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#222]">
+            {products.map(p => (
+              <tr key={p.id} className="hover:bg-[#0A0A0A]">
+                <td className="p-3">
+                  <div className="w-10 h-10 bg-[#0A0A0A] rounded overflow-hidden">
+                    {p.images?.[0] && <img src={p.images[0]} alt="" className="w-full h-full object-cover" />}
+                  </div>
+                </td>
+                <td className="p-3 font-semibold">{p.name}</td>
+                <td className="p-3">{formatPrice(p.price)}</td>
+                <td className="p-3 text-xs text-[#999]">{p.condition}</td>
+                <td className="p-3">
+                  <button onClick={() => toggleSoldOut(p.id, p.isSoldOut)} className={`text-xs px-2 py-0.5 font-semibold rounded ${p.isSoldOut ? 'bg-red-900/30 text-red-400' : 'bg-green-900/30 text-green-400'}`}>
+                    {p.isSoldOut ? 'Sold out' : 'Active'}
+                  </button>
+                </td>
+                <td className="p-3">
+                  <div className="flex gap-2">
+                    <button onClick={() => openEdit(p)} className="text-xs text-[#FF2D78] hover:underline">Edit</button>
+                    <button onClick={() => handleDelete(p.id)} className="text-xs text-red-400 hover:underline">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {products.length === 0 && <p className="p-8 text-center text-[#555]">No products yet.</p>}
       </div>
     </div>
   )

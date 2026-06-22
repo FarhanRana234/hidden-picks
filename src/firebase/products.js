@@ -4,9 +4,14 @@ import { collection, addDoc, getDoc, getDocs, updateDoc, deleteDoc, doc, query, 
 const col = collection(db, 'products')
 
 export async function getProducts() {
-  const q = query(col, orderBy('createdAt', 'desc'))
-  const snap = await getDocs(q)
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  try {
+    const q = query(col, orderBy('createdAt', 'desc'))
+    const snap = await getDocs(q)
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  } catch {
+    const snap = await getDocs(col)
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  }
 }
 
 export async function getProduct(id) {

@@ -28,45 +28,40 @@ export default function AdminDashboard() {
   if (loading) return <div className="p-8 text-center text-[#555]">Loading...</div>
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white">
-      <AdminNav logout={logout} />
-      <div className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="font-heading text-3xl font-bold mb-8">Dashboard</h1>
+    <div className="px-6 py-8">
+      <h1 className="font-heading text-3xl font-bold mb-8">Dashboard</h1>
 
-        {settings?.announcementBanner?.show && (
-          <div className="bg-[#FF2D78]/10 border border-[#FF2D78]/30 text-sm p-3 mb-8 text-center rounded">{settings.announcementBanner.text}</div>
-        )}
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="Total Products" value={stats.products} />
-          <StatCard label="Active Listings" value={stats.active} />
-          <StatCard label="Sold Out" value={stats.soldOut} />
-          <StatCard label="Total Orders" value={stats.orders} />
+      {settings?.announcementBanner?.show && (
+        <div className="bg-[#FF2D78]/10 border border-[#FF2D78]/30 text-sm p-3 mb-8 text-center rounded">
+          {settings.announcementBanner.text}
         </div>
+      )}
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <Link to="/admin/products" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">products</Link>
-          <Link to="/admin/orders" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">orders</Link>
-          <Link to="/admin/banners" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">banners</Link>
-          <Link to="/admin/instagram" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">instagram</Link>
-          <Link to="/admin/settings" className="bg-[#111] border border-[#222] text-white p-6 text-center font-heading text-xl font-bold hover:border-[#FF2D78] transition rounded-lg">settings</Link>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <StatCard label="Total Products" value={stats.products} />
+        <StatCard label="Active Listings" value={stats.active} />
+        <StatCard label="Sold Out" value={stats.soldOut} />
+        <StatCard label="Total Orders" value={stats.orders} />
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+        <Link to="/admin/products" className="bg-[#111] border border-[#222] text-white p-5 text-center font-heading text-sm font-bold hover:border-[#FF2D78] transition rounded-lg">
+          Products
+        </Link>
+        <Link to="/admin/orders" className="bg-[#111] border border-[#222] text-white p-5 text-center font-heading text-sm font-bold hover:border-[#FF2D78] transition rounded-lg">
+          Orders
+        </Link>
+        <Link to="/admin/banners" className="bg-[#111] border border-[#222] text-white p-5 text-center font-heading text-sm font-bold hover:border-[#FF2D78] transition rounded-lg">
+          Banners
+        </Link>
+        <Link to="/admin/instagram" className="bg-[#111] border border-[#222] text-white p-5 text-center font-heading text-sm font-bold hover:border-[#FF2D78] transition rounded-lg">
+          Instagram
+        </Link>
+        <Link to="/admin/settings" className="bg-[#111] border border-[#222] text-white p-5 text-center font-heading text-sm font-bold hover:border-[#FF2D78] transition rounded-lg">
+          Settings
+        </Link>
       </div>
     </div>
-  )
-}
-
-function AdminNav({ logout }) {
-  return (
-    <nav className="bg-[#111] text-white px-4 py-3 flex items-center justify-between border-b border-[#222]">
-      <Link to="/admin" className="font-heading font-bold text-lg">hidden picks admin</Link>
-        <div className="flex items-center gap-4 text-sm text-[#999]">
-          <Link to="/admin/banners" className="hover:text-[#FF2D78] transition">banners</Link>
-          <Link to="/admin/instagram" className="hover:text-[#FF2D78] transition">instagram</Link>
-          <Link to="/" className="hover:text-[#FF2D78] transition">view store</Link>
-          <button onClick={logout} className="hover:text-[#FF2D78] transition">logout</button>
-        </div>
-    </nav>
   )
 }
 
