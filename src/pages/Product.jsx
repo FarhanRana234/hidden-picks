@@ -12,17 +12,16 @@ export default function Product() {
   const [product, setProduct] = useState(null)
   const [related, setRelated] = useState([])
   const [loading, setLoading] = useState(true)
-  const [selectedImage, setSelectedImage] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [zoomed, setZoomed] = useState(false)
-  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 })
-  const mainImgRef = useRef(null)
-  const touchStartX = useRef(0)
+  const mainRef = useRef(null)
+  const touchStartX = useRef(null)
 
   useEffect(() => {
     setLoading(true)
     getProductBySlug(slug).then(p => {
       setProduct(p)
-      setSelectedImage(0)
+      setActiveIndex(0)
       if (p) {
         getProducts().then(all => {
           setRelated(all.filter(r => r.id !== p.id && !r.isSoldOut).slice(0, 4))
@@ -37,13 +36,11 @@ export default function Product() {
   }
 
   function prevImage() {
-    if (!product?.images?.length) return
-    setSelectedImage(prev => (prev - 1 + product.images.length) % product.images.length)
+    setActiveIndex(i => Math.max(i - 1, 0))
   }
 
   function nextImage() {
-    if (!product?.images?.length) return
-    setSelectedImage(prev => (prev + 1) % product.images.length)
+    setActiveIndex(i => Math.min(i + 1, product.images.length - 1))
   }
 
   function handleTouchStart(e) {
@@ -51,24 +48,24 @@ export default function Product() {
   }
 
   function handleTouchEnd(e) {
+    if (touchStartX.current === null) return
     const diff = touchStartX.current - e.changedTouches[0].clientX
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextImage()
-      else prevImage()
-    }
+    if (diff > 50) nextImage()
+    if (diff < -50) prevImage()
+    touchStartX.current = null
   }
 
   function handleMouseMove(e) {
-    if (!zoomed || !mainImgRef.current) return
-    const rect = mainImgRef.current.getBoundingClientRect()
-    setZoomPos({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    })
+    if (!zoomed || !mainRef.current) return
+    const rect = mainRef.current.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    mainRef.current.style.setProperty('--zoom-x', `${x}%`)
+    mainRef.current.style.setProperty('--zoom-y', `${y}%`)
   }
 
   function toggleZoom() {
-    setZoomed(!zoomed)
+    setZoomed(z => !z)
   }
 
   if (loading) return <div className="max-w-6xl mx-auto px-4 py-20 text-center text-[#555]">Loading...</div>
@@ -83,45 +80,60 @@ export default function Product() {
       <div className="product-detail-layout">
         <div className="product-gallery">
           <div
+            ref={mainRef}
             className={`gallery-main ${zoomed ? 'zoomed' : ''}`}
-            ref={mainImgRef}
             onClick={toggleZoom}
             onMouseMove={handleMouseMove}
+            onMouseLeave={() => setZoomed(false)}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
-            style={zoomed ? { transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : undefined}
           >
-            {product.images?.length > 0 ? (
-              <img src={product.images[selectedImage]} alt={product.name} className="gallery-main-img" />
-            ) : (
+            {product.images?.length > 0 ? product.images.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`${product.name} ${i + 1}`}
+                style={{
+                  opacity: i === activeIndex ? 1 : 0,
+                  transition: 'opacity 0.3s ease',
+                  pointerEvents: i === activeIndex ? 'auto' : 'none'
+                }}
+              />
+            )) : (
               <div className="w-full h-full flex items-center justify-center text-[#555] font-heading">No image</div>
             )}
 
             {product.images?.length > 1 && !zoomed && (
               <>
-                <button className="gallery-arrow prev" onClick={e => { e.stopPropagation(); prevImage() }} aria-label="Previous">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                <button className="gallery-arrow gallery-arrow-left" onClick={e => { e.stopPropagation(); prevImage() }} disabled={activeIndex === 0} aria-label="Previous image">
+                  <i className="ti ti-chevron-left" />
                 </button>
-                <button className="gallery-arrow next" onClick={e => { e.stopPropagation(); nextImage() }} aria-label="Next">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                <button className="gallery-arrow gallery-arrow-right" onClick={e => { e.stopPropagation(); nextImage() }} disabled={activeIndex === product.images.length - 1} aria-label="Next image">
+                  <i className="ti ti-chevron-right" />
                 </button>
               </>
+            )}
+
+            {product.images?.length > 1 && !zoomed && (
+              <div className="gallery-dots">
+                {product.images.map((_, i) => (
+                  <button key={i} className={`gallery-dot ${i === activeIndex ? 'active' : ''}`} onClick={e => { e.stopPropagation(); setActiveIndex(i) }} aria-label={`Go to image ${i + 1}`} />
+                ))}
+              </div>
+            )}
+
+            {!zoomed && (
+              <span className="gallery-zoom-hint" aria-hidden="true">
+                <i className="ti ti-zoom-in" /> Click to zoom
+              </span>
             )}
           </div>
 
           {product.images?.length > 1 && (
-            <div className="gallery-dots">
-              {product.images.map((_, i) => (
-                <button key={i} className={`gallery-dot ${i === selectedImage ? 'active' : ''}`} onClick={() => setSelectedImage(i)} aria-label={`Image ${i + 1}`} />
-              ))}
-            </div>
-          )}
-
-          {product.images?.length > 1 && (
-            <div className="product-thumbnails">
-              {product.images.map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i)} className={i === selectedImage ? 'active' : ''}>
-                  <img src={img} alt="" />
+            <div className="gallery-thumbs">
+              {product.images.map((src, i) => (
+                <button key={i} className={`gallery-thumb ${i === activeIndex ? 'active' : ''}`} onClick={() => { setActiveIndex(i); setZoomed(false) }} aria-label={`View image ${i + 1}`}>
+                  <img src={src} alt="" />
                 </button>
               ))}
             </div>
