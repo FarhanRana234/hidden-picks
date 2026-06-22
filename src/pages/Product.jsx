@@ -1,27 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getProductBySlug, getProducts } from '../firebase/products'
 import { useCart } from '../context/CartContext'
+import { useToast } from '../context/ToastContext'
 import ProductCard from '../components/ProductCard'
-
-const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER
 
 export default function Product() {
   const { slug } = useParams()
   const { addItem } = useCart()
+  const toast = useToast()
   const [product, setProduct] = useState(null)
   const [related, setRelated] = useState([])
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
-  const [qty, setQty] = useState(1)
-  const [showSpecs, setShowSpecs] = useState(false)
+  const [zoomed, setZoomed] = useState(false)
+  const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 })
+  const mainImgRef = useRef(null)
+  const touchStartX = useRef(0)
 
   useEffect(() => {
     setLoading(true)
     getProductBySlug(slug).then(p => {
       setProduct(p)
       setSelectedImage(0)
-      setQty(1)
       if (p) {
         getProducts().then(all => {
           setRelated(all.filter(r => r.id !== p.id && !r.isSoldOut).slice(0, 4))
@@ -35,29 +36,92 @@ export default function Product() {
     return '₨ ' + Number(pkr).toLocaleString('en-PK')
   }
 
+  function prevImage() {
+    if (!product?.images?.length) return
+    setSelectedImage(prev => (prev - 1 + product.images.length) % product.images.length)
+  }
+
+  function nextImage() {
+    if (!product?.images?.length) return
+    setSelectedImage(prev => (prev + 1) % product.images.length)
+  }
+
+  function handleTouchStart(e) {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  function handleTouchEnd(e) {
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) nextImage()
+      else prevImage()
+    }
+  }
+
+  function handleMouseMove(e) {
+    if (!zoomed || !mainImgRef.current) return
+    const rect = mainImgRef.current.getBoundingClientRect()
+    setZoomPos({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    })
+  }
+
+  function toggleZoom() {
+    setZoomed(!zoomed)
+  }
+
   if (loading) return <div className="max-w-6xl mx-auto px-4 py-20 text-center text-[#555]">Loading...</div>
-  if (!product) return <div className="max-w-6xl mx-auto px-4 py-20 text-center font-heading text-2xl text-white">camera not found</div>
+  if (!product) return <div className="max-w-6xl mx-auto px-4 py-20 text-center font-heading text-2xl text-white">Camera not found</div>
 
   const soldOut = product.isSoldOut
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <Link to="/shop" className="text-sm text-[#999] hover:text-[#FF2D78] transition mb-6 inline-block">&larr; back to shop</Link>
+      <Link to="/shop" className="text-sm text-[#999] hover:text-[#FF2D78] transition mb-6 inline-block">&larr; Back to Shop</Link>
 
       <div className="product-detail-layout">
         <div className="product-gallery">
-          <div className="product-gallery-main">
+          <div
+            className={`gallery-main ${zoomed ? 'zoomed' : ''}`}
+            ref={mainImgRef}
+            onClick={toggleZoom}
+            onMouseMove={handleMouseMove}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            style={zoomed ? { transformOrigin: `${zoomPos.x}% ${zoomPos.y}%` } : undefined}
+          >
             {product.images?.length > 0 ? (
-              <img src={product.images[selectedImage]} alt={product.name} />
+              <img src={product.images[selectedImage]} alt={product.name} className="gallery-main-img" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[#555] font-heading">No image</div>
             )}
+
+            {product.images?.length > 1 && !zoomed && (
+              <>
+                <button className="gallery-arrow prev" onClick={e => { e.stopPropagation(); prevImage() }} aria-label="Previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button className="gallery-arrow next" onClick={e => { e.stopPropagation(); nextImage() }} aria-label="Next">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </>
+            )}
           </div>
+
+          {product.images?.length > 1 && (
+            <div className="gallery-dots">
+              {product.images.map((_, i) => (
+                <button key={i} className={`gallery-dot ${i === selectedImage ? 'active' : ''}`} onClick={() => setSelectedImage(i)} aria-label={`Image ${i + 1}`} />
+              ))}
+            </div>
+          )}
+
           {product.images?.length > 1 && (
             <div className="product-thumbnails">
               {product.images.map((img, i) => (
-                <button key={i} onClick={() => setSelectedImage(i)}>
-                  <img src={img} alt="" className={i === selectedImage ? 'active' : ''} />
+                <button key={i} onClick={() => setSelectedImage(i)} className={i === selectedImage ? 'active' : ''}>
+                  <img src={img} alt="" />
                 </button>
               ))}
             </div>
@@ -65,54 +129,66 @@ export default function Product() {
         </div>
 
         <div className="product-info">
-          <span className={`product-condition ${(product.condition || '').toLowerCase().replace(/\s+/g, '-')}`}>{product.condition}</span>
+          <div className="product-info-header">
+            <span className="product-brand-label">{product.brand}</span>
+            <span className={`product-condition ${(product.condition || '').toLowerCase().replace(/\s+/g, '-')}`}>{product.condition}</span>
+          </div>
           <h1>{product.name}</h1>
           <p className="product-price">{formatPrice(product.price)}</p>
           <p className="product-description">{product.description}</p>
 
+          <hr className="border-[#222] my-6" />
+
           {product.specs && Object.keys(product.specs).length > 0 && (
             <div className="mb-6">
-              <button onClick={() => setShowSpecs(!showSpecs)} className="text-sm font-semibold text-[#FF2D78] hover:underline">
-                {showSpecs ? 'hide' : 'show'} specifications
-              </button>
-              {showSpecs && (
-                <table className="product-specs-table">
-                  <tbody>
-                    {Object.entries(product.specs).map(([k, v], i) => (
-                      <tr key={k} className={i % 2 === 0 ? 'bg-[#111]' : 'bg-[#0A0A0A]'}>
-                        <td className="font-semibold text-white capitalize w-1/2">{k}</td>
-                        <td className="text-[#999] w-1/2">{v}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+              <table className="product-specs-table">
+                <tbody>
+                  {Object.entries(product.specs).map(([k, v]) => (
+                    <tr key={k}>
+                      <td className="spec-key">{k}</td>
+                      <td className="spec-value">{v}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
 
-          <div className="product-actions">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center border border-[#222] rounded">
-                <button onClick={() => setQty(Math.max(1, qty - 1))} className="px-3 py-2 text-sm text-[#999] hover:text-white hover:bg-[#222] transition rounded-l">-</button>
-                <span className="px-4 py-2 text-sm font-semibold min-w-[3rem] text-center text-white">{qty}</span>
-                <button onClick={() => setQty(Math.min(product.isUnique ? 1 : 99, qty + 1))} className="px-3 py-2 text-sm text-[#999] hover:text-white hover:bg-[#222] transition rounded-r">+</button>
-              </div>
-              <button
-                disabled={soldOut}
-                onClick={() => addItem({ id: product.id, slug: product.slug, name: product.name, price: Number(product.price), image: product.images?.[0], maxQty: product.isUnique ? 1 : 99, qty })}
-                className={`flex-1 py-3 font-semibold text-sm rounded transition ${soldOut ? 'bg-[#222] text-[#555] cursor-not-allowed' : 'bg-[#FF2D78] text-white hover:bg-[#FF2D78]/90'}`}
-              >
-                {soldOut ? 'Sold Out' : 'Add to Cart'}
-              </button>
+          <hr className="border-[#222] my-6" />
+
+          {soldOut ? (
+            <div className="sold-out-notice">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+              This item is sold out
             </div>
-            <a
-              href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(`Hi! I'm interested in "${product.name}" listed at ₨${product.price} on Hidden Picks.`)}`}
-              target="_blank" rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-[#25D366] text-white py-3 text-sm font-semibold rounded hover:bg-[#25D366]/90 transition"
+          ) : (
+            <button
+              onClick={() => {
+                addItem({ id: product.id, slug: product.slug, name: product.name, price: Number(product.price), image: product.images?.[0], maxQty: product.isUnique ? 1 : 99, qty: 1 })
+                toast('Added to cart')
+              }}
+              className="product-add-cart-btn"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Ask on WhatsApp
-            </a>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" /></svg>
+              Add to Cart
+            </button>
+          )}
+
+          <hr className="border-[#222] my-6" />
+
+          <div className="delivery-info">
+            <div className="delivery-info-row">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FF2D78]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
+              <span>Ships across Pakistan</span>
+            </div>
+            <div className="delivery-info-row">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FF2D78]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>Tested and verified</span>
+            </div>
+            <div className="delivery-info-row">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#FF2D78]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+              <span>Based in Lahore</span>
+            </div>
           </div>
         </div>
       </div>
@@ -121,9 +197,7 @@ export default function Product() {
         <div className="related-products">
           <h2>You Might Also Like</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {related.map(p => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+            {related.map(p => <ProductCard key={p.id} product={p} />)}
           </div>
         </div>
       )}

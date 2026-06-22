@@ -13,7 +13,12 @@ export default function Shop() {
   const [selectedConditions, setSelectedConditions] = useState([])
   const [priceRange, setPriceRange] = useState([0, 200000])
   const [sort, setSort] = useState('newest')
-  const [filtersOpen, setFiltersOpen] = useState(false)
+
+  // Mobile filter state
+  const [activePill, setActivePill] = useState(null)
+  const [pendingBrands, setPendingBrands] = useState([])
+  const [pendingEras, setPendingEras] = useState([])
+  const [pendingConditions, setPendingConditions] = useState([])
 
   function toggle(arr, val) {
     return arr.includes(val) ? arr.filter(v => v !== val) : [...arr, val]
@@ -47,6 +52,45 @@ export default function Shop() {
     setSelectedConditions([])
   }
 
+  function openPill(type) {
+    if (activePill === type) {
+      setActivePill(null)
+      return
+    }
+    setActivePill(type)
+    setPendingBrands([...selectedBrands])
+    setPendingEras([...selectedEras])
+    setPendingConditions([...selectedConditions])
+  }
+
+  function applyFilters() {
+    setSelectedBrands(pendingBrands)
+    setSelectedEras(pendingEras)
+    setSelectedConditions(pendingConditions)
+    setActivePill(null)
+  }
+
+  const pillConfig = [
+    { key: 'brand', label: 'Brand', options: brands, pending: pendingBrands, setPending: setPendingBrands },
+    { key: 'era', label: 'Era', options: eras, pending: pendingEras, setPending: setPendingEras },
+    { key: 'condition', label: 'Condition', options: conditions, pending: pendingConditions, setPending: setPendingConditions },
+    {
+      key: 'price',
+      label: 'Price',
+      render: () => (
+        <div>
+          <input
+            type="range" min="0" max="200000" step="1000"
+            value={priceRange[1]}
+            onChange={e => setPriceRange([0, Number(e.target.value)])}
+            className="w-full"
+          />
+          <p className="text-xs text-[#999] mt-2">₨ 0 — ₨ {Number(priceRange[1]).toLocaleString('en-PK')}</p>
+        </div>
+      ),
+    },
+  ]
+
   if (loading) return <div className="max-w-6xl mx-auto px-4 py-20 text-center text-[#555]">Loading...</div>
 
   return (
@@ -54,14 +98,61 @@ export default function Shop() {
       <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2">Shop All</h1>
       <p className="text-[#999] text-sm mb-8">Find Your Perfect Digicam</p>
 
+      {/* Mobile filter bar */}
+      <div className="mobile-filter-bar">
+        {pillConfig.map(pill => (
+          <button
+            key={pill.key}
+            className={`mobile-filter-pill ${activePill === pill.key ? 'active' : ''}`}
+            onClick={() => openPill(pill.key)}
+          >
+            {pill.label}
+            <svg xmlns="http://www.w3.org/2000/svg" className={`h-3 w-3 transition-transform ${activePill === pill.key ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          </button>
+        ))}
+        <div className="w-4 shrink-0" />
+      </div>
+
+      {/* Mobile filter dropdown */}
+      {activePill && (
+        <>
+          <div className="mobile-filter-backdrop" onClick={() => setActivePill(null)} />
+          <div className="mobile-filter-dropdown">
+            {activePill === 'price' ? (
+              pillConfig.find(p => p.key === 'price').render()
+            ) : (
+              <>
+                <h4 className="font-heading text-sm font-bold tracking-wider text-[#999] mb-3">
+                  {activePill.charAt(0).toUpperCase() + activePill.slice(1)}
+                </h4>
+                <div className="space-y-2 mb-6">
+                  {pillConfig.find(p => p.key === activePill).options.map(opt => (
+                    <label key={opt} className="flex items-center gap-3 text-sm cursor-pointer text-white py-1.5">
+                      <input
+                        type="checkbox"
+                        checked={pillConfig.find(p => p.key === activePill).pending.includes(opt)}
+                        onChange={() => {
+                          const cfg = pillConfig.find(p => p.key === activePill)
+                          cfg.setPending(toggle(cfg.pending, opt))
+                        }}
+                        className="accent-[#FF2D78] w-4 h-4"
+                      />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
+                <button onClick={applyFilters} className="w-full bg-[#FF2D78] text-white py-3 text-sm font-semibold rounded-lg">
+                  Apply
+                </button>
+              </>
+            )}
+          </div>
+        </>
+      )}
+
       <div className="shop-layout">
         <aside className="shop-sidebar">
-          <div className="filters-toggle" onClick={() => setFiltersOpen(!filtersOpen)}>
-            <span>Filters</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${filtersOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-          </div>
-
-          <div className={`filters-content ${filtersOpen ? 'open' : ''}`}>
+          <div className="filters-content">
             <div>
               <h4 className="font-heading text-xs font-bold tracking-wider text-[#999] mb-3">Brand</h4>
               <div className="space-y-1.5">
