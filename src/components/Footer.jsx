@@ -7,22 +7,22 @@ export default function Footer() {
         <div>
           <h4 className="font-heading text-lg font-bold mb-4">Hidden Picks</h4>
           <p className="text-sm text-[#999] leading-relaxed">
-            lahore's only curated digicam store. y2k, ccd & vintage cameras shipped across pakistan.
+            Lahore's only curated digicam store. Y2K, CCD & vintage cameras shipped across Pakistan.
           </p>
         </div>
         <div>
           <h4 className="font-heading text-sm font-bold mb-4 tracking-wider text-[#999]">Quick Links</h4>
           <ul className="space-y-2 text-sm text-[#999]">
-            <li><a href="/shop" className="hover:text-[#FF2D78] transition">shop all</a></li>
-            <li><a href="/budget" className="hover:text-[#FF2D78] transition">budget picks</a></li>
-            <li><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#FF2D78] transition">whatsapp</a></li>
-            <li><a href="https://instagram.com/hiddenpicks.co_" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF2D78] transition">instagram</a></li>
+            <li><a href="/shop" className="hover:text-[#FF2D78] transition">Shop All</a></li>
+            <li><a href="/budget" className="hover:text-[#FF2D78] transition">Budget Picks</a></li>
+            <li><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#FF2D78] transition">WhatsApp</a></li>
+            <li><a href="https://instagram.com/hiddenpicks.co_" target="_blank" rel="noopener noreferrer" className="hover:text-[#FF2D78] transition">Instagram</a></li>
           </ul>
         </div>
         <div>
           <h4 className="font-heading text-sm font-bold mb-4 tracking-wider text-[#999]">Contact</h4>
           <ul className="space-y-2 text-sm text-[#999]">
-            <li>lahore, pakistan</li>
+            <li>Lahore, Pakistan</li>
             <li><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noopener noreferrer" className="hover:text-[#FF2D78] transition">+92{WHATSAPP?.slice(2)}</a></li>
             <li className="flex gap-3 mt-2 text-xs">
               <span className="bg-[#111] px-2 py-1 rounded">jazzcash</span>
@@ -33,7 +33,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="border-t border-[#222] text-center text-xs text-[#555] py-4">
-        &copy; {new Date().getFullYear()} hidden picks. all rights reserved.
+        &copy; {new Date().getFullYear()} Hidden Picks. All rights reserved.
       </div>
     </footer>
   )

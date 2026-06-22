@@ -38,10 +38,10 @@ export default function AdminDashboard() {
         )}
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard label="total products" value={stats.products} />
-          <StatCard label="active listings" value={stats.active} />
-          <StatCard label="sold out" value={stats.soldOut} />
-          <StatCard label="total orders" value={stats.orders} />
+          <StatCard label="Total Products" value={stats.products} />
+          <StatCard label="Active Listings" value={stats.active} />
+          <StatCard label="Sold Out" value={stats.soldOut} />
+          <StatCard label="Total Orders" value={stats.orders} />
         </div>
 
         <div className="mt-8 grid grid-cols-1 sm:grid-cols-4 gap-4">

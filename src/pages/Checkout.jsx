@@ -82,31 +82,31 @@ export default function Checkout() {
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
         <form onSubmit={handleSubmit} className="md:col-span-3 space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-[#999] mb-1">full name *</label>
+            <label className="block text-sm font-semibold text-[#999] mb-1">Full Name *</label>
             <input name="customerName" value={form.customerName} onChange={handleChange} required className="w-full bg-[#111] border border-[#222] text-white px-3 py-2 text-sm rounded" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#999] mb-1">phone (03xx) *</label>
+            <label className="block text-sm font-semibold text-[#999] mb-1">Phone (03xx) *</label>
             <input name="phone" value={form.phone} onChange={handleChange} placeholder="03XXXXXXXXX" required className="w-full bg-[#111] border border-[#222] text-white px-3 py-2 text-sm rounded" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#999] mb-1">city *</label>
+            <label className="block text-sm font-semibold text-[#999] mb-1">City *</label>
             <select name="city" value={form.city} onChange={handleChange} required className="w-full bg-[#111] border border-[#222] text-white px-3 py-2 text-sm rounded">
-              <option value="" className="bg-[#111]">select city</option>
+              <option value="" className="bg-[#111]">Select City</option>
               {pakCities.map(c => <option key={c} value={c} className="bg-[#111]">{c}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#999] mb-1">address *</label>
+            <label className="block text-sm font-semibold text-[#999] mb-1">Address *</label>
             <textarea name="address" value={form.address} onChange={handleChange} required rows={3} className="w-full bg-[#111] border border-[#222] text-white px-3 py-2 text-sm rounded" />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-[#999] mb-1">notes (optional)</label>
+            <label className="block text-sm font-semibold text-[#999] mb-1">Notes (optional)</label>
             <textarea name="notes" value={form.notes} onChange={handleChange} rows={2} className="w-full bg-[#111] border border-[#222] text-white px-3 py-2 text-sm rounded" />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#999] mb-2">payment method *</label>
+            <label className="block text-sm font-semibold text-[#999] mb-2">Payment Method *</label>
             <div className="space-y-2">
               {paymentMethods.map(m => (
                 <label key={m} className="flex items-center gap-2 text-sm cursor-pointer text-white">
@@ -127,7 +127,7 @@ export default function Checkout() {
           {error && <p className="text-[#FF2D78] text-sm">{error}</p>}
 
           <button type="submit" disabled={submitting} className="w-full bg-[#FF2D78] text-white py-3 font-semibold text-sm rounded hover:bg-[#FF2D78]/90 transition disabled:opacity-50">
-            {submitting ? 'placing order...' : `place order — ${formatPrice(total)}`}
+            {submitting ? 'Placing order...' : `Place Order — ${formatPrice(total)}`}
           </button>
         </form>
 
@@ -149,7 +149,7 @@ export default function Checkout() {
               ))}
             </div>
             <div className="border-t border-[#222] mt-4 pt-4 flex justify-between font-heading text-lg font-bold">
-              <span className="text-white">total</span>
+              <span className="text-white">Total</span>
               <span className="text-[#FFD700]">{formatPrice(total)}</span>
             </div>
           </div>

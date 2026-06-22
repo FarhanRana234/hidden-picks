@@ -1,30 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useProducts } from '../hooks/useProducts'
-import { getBanners } from '../firebase/banners'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../firebase/config'
 import PolaroidCard from '../components/PolaroidCard'
 
 const WHATSAPP = import.meta.env.VITE_WHATSAPP_NUMBER
 
 const brands = ['Sony', 'Canon', 'Fujifilm', 'Nikon', 'Kodak', 'Samsung', 'Vashica', 'Polaroid', 'Sanyo', 'Olympus', 'Casio']
-
-const defaultBanners = {
-  banner1: {
-    videoUrl: 'https://cdn.pixabay.com/video/2023/08/15/175801-854671624_large.mp4',
-    heading: 'The Flip Era',
-    subtext: 'Pocket-sized. Iconic. Never Forgotten.',
-  },
-  banner2: {
-    videoUrl: 'https://cdn.pixabay.com/video/2020/04/19/36798-428813922_large.mp4',
-    heading: "Shoot Like It's 2004",
-    subtext: 'CCD Sensors. Warm Tones. Real Memories.',
-  },
-  banner3: {
-    videoUrl: 'https://cdn.pixabay.com/video/2023/10/10/183947-872316115_large.mp4',
-    heading: 'Every Shot Tells a Story',
-    subtext: 'Hidden Picks brings you hand-picked digicams from Lahore.',
-  },
-}
 
 const features = [
   {
@@ -61,24 +44,20 @@ const instagramPosts = Array(6).fill(null)
 
 export default function Home() {
   const { products } = useProducts()
-  const [banners, setBanners] = useState(defaultBanners)
+  const [banners, setBanners] = useState({
+    banner1: { videoUrl: '', heading: 'The Flip Era', subtext: 'Pocket-sized. Iconic. Never Forgotten.' },
+    banner2: { videoUrl: '', heading: "Shoot Like It's 2004", subtext: 'CCD Sensors. Warm Tones. Real Memories.' },
+    banner3: { videoUrl: '', heading: 'Every Shot Tells a Story', subtext: 'Hidden Picks brings you hand-picked digicams from Lahore.' },
+  })
   const featured = products.filter(p => !p.isSoldOut).slice(0, 6)
 
   useEffect(() => {
-    getBanners().then(data => {
-      if (data) {
-        setBanners({
-          banner1: { ...defaultBanners.banner1, ...data.banner1 },
-          banner2: { ...defaultBanners.banner2, ...data.banner2 },
-          banner3: { ...defaultBanners.banner3, ...data.banner3 },
-        })
+    getDoc(doc(db, 'settings', 'banners')).then(snap => {
+      if (snap.exists()) {
+        setBanners(prev => ({ ...prev, ...snap.data() }))
       }
     }).catch(() => {})
   }, [])
-
-  const banner1Src = banners.banner1.videoUrl || defaultBanners.banner1.videoUrl
-  const banner2Src = banners.banner2.videoUrl || defaultBanners.banner2.videoUrl
-  const banner3Src = banners.banner3.videoUrl || defaultBanners.banner3.videoUrl
 
   return (
     <div>
@@ -95,10 +74,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/shop" className="bg-[#FF2D78] text-white font-semibold px-8 py-3 text-sm hover:bg-[#FF2D78]/90 transition rounded" style={{ letterSpacing: '0.04em' }}>
-              shop now
+              Shop Now
             </Link>
             <a href="https://instagram.com/hiddenpicks.co_" target="_blank" rel="noopener noreferrer" className="border border-[#333] text-white font-semibold px-8 py-3 text-sm hover:border-white transition rounded" style={{ letterSpacing: '0.04em' }}>
-              view on instagram
+              View on Instagram
             </a>
           </div>
         </div>
@@ -106,10 +85,16 @@ export default function Home() {
 
       {/* Video Banner 1 — The Flip Era */}
       <section className="relative w-full min-h-[500px] overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          {banners.banner1.videoUrl && <source src={banners.banner1.videoUrl} type="video/mp4" />}
-          {!banners.banner1.videoUrl && <source src={defaultBanners.banner1.videoUrl} type="video/mp4" />}
-        </video>
+        {banners.banner1.videoUrl ? (
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+            <source src={banners.banner1.videoUrl} type="video/mp4" />
+          </video>
+        ) : (
+          <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[#333]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            <p className="text-[#444] text-sm mt-3">No video uploaded yet</p>
+          </div>
+        )}
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 flex flex-col items-center justify-center min-h-[500px] px-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-4">{banners.banner1.heading}</h2>
@@ -119,10 +104,16 @@ export default function Home() {
 
       {/* Video Banner 2 — Shoot Like It's 2004 */}
       <section className="relative w-full min-h-[500px] overflow-hidden">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-          {banners.banner2.videoUrl && <source src={banners.banner2.videoUrl} type="video/mp4" />}
-          {!banners.banner2.videoUrl && <source src={defaultBanners.banner2.videoUrl} type="video/mp4" />}
-        </video>
+        {banners.banner2.videoUrl ? (
+          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+            <source src={banners.banner2.videoUrl} type="video/mp4" />
+          </video>
+        ) : (
+          <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[#333]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            <p className="text-[#444] text-sm mt-3">No video uploaded yet</p>
+          </div>
+        )}
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 flex flex-col items-center justify-center min-h-[500px] px-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl font-bold text-white mb-4">{banners.banner2.heading}</h2>
@@ -140,10 +131,16 @@ export default function Home() {
           </Link>
         </div>
         <div className="relative min-h-[300px] md:min-h-full overflow-hidden">
-          <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-            {banners.banner3.videoUrl && <source src={banners.banner3.videoUrl} type="video/mp4" />}
-            {!banners.banner3.videoUrl && <source src={defaultBanners.banner3.videoUrl} type="video/mp4" />}
-          </video>
+          {banners.banner3.videoUrl ? (
+            <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
+              <source src={banners.banner3.videoUrl} type="video/mp4" />
+            </video>
+          ) : (
+            <div className="absolute inset-0 bg-[#111] flex flex-col items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-[#333]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+              <p className="text-[#444] text-sm mt-3">No video uploaded yet</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -193,9 +190,9 @@ export default function Home() {
           <h2 className="font-heading text-2xl md:text-3xl font-bold mb-10">Pack an Order With Me 📦</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              { num: '01', title: 'browse & pick', desc: 'find your perfect digicam from our curated collection.' },
-              { num: '02', title: 'order via whatsapp', desc: 'message us on whatsapp or place order directly on site.' },
-              { num: '03', title: 'packed & shipped with love', desc: 'we carefully pack and ship your camera across pakistan.' },
+              { num: '01', title: 'Browse & Pick', desc: 'Find your perfect digicam from our curated collection.' },
+              { num: '02', title: 'Order via WhatsApp', desc: 'Message us on WhatsApp or place order directly on site.' },
+              { num: '03', title: 'Packed & Shipped With Love', desc: 'We carefully pack and ship your camera across Pakistan.' },
             ].map(s => (
               <div key={s.num} className="bg-[#0A0A0A] border border-[#222] rounded-lg p-6">
                 <span className="text-[#FF2D78] font-heading text-3xl font-bold block mb-3">{s.num}</span>
@@ -211,7 +208,7 @@ export default function Home() {
       <section className="py-16 md:py-24 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="font-heading text-2xl md:text-3xl font-bold mb-2">@hiddenpicks.co_</h2>
-          <p className="text-[#999] text-sm mb-8">follow us for daily drops & digicam inspo</p>
+          <p className="text-[#999] text-sm mb-8">Follow us for daily drops & digicam inspo</p>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-8">
             {instagramPosts.map((_, i) => (
               <a key={i} href="https://instagram.com/hiddenpicks.co_" target="_blank" rel="noopener noreferrer" className="aspect-square bg-[#111] rounded border border-[#222] flex items-center justify-center text-[#555] hover:border-[#FF2D78] transition overflow-hidden group">
@@ -220,7 +217,7 @@ export default function Home() {
             ))}
           </div>
           <a href="https://instagram.com/hiddenpicks.co_" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#FF2D78] text-white font-semibold px-8 py-3 text-sm hover:bg-[#FF2D78]/90 transition rounded" style={{ letterSpacing: '0.04em' }}>
-            follow on instagram
+            Follow on Instagram
           </a>
         </div>
       </section>

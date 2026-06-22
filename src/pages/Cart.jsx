@@ -11,10 +11,10 @@ export default function Cart() {
   if (items.length === 0) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <h1 className="font-heading text-3xl font-bold mb-4">your cart is empty</h1>
-        <p className="text-[#999] mb-8">nothing here yet. go grab a digicam!</p>
+        <h1 className="font-heading text-3xl font-bold mb-4">Your Cart Is Empty</h1>
+        <p className="text-[#999] mb-8">Nothing here yet. Go grab a digicam!</p>
         <Link to="/shop" className="bg-[#FF2D78] text-white px-8 py-3 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition">
-          browse cameras
+          Browse Cameras
         </Link>
       </div>
     )
@@ -31,7 +31,7 @@ export default function Cart() {
               {item.image ? (
                 <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[#555] text-xs">no img</div>
+                <div className="w-full h-full flex items-center justify-center text-[#555] text-xs">No image</div>
               )}
             </div>
             <div className="flex-1 min-w-0">
@@ -43,7 +43,7 @@ export default function Cart() {
                   <span className="px-3 py-1 font-semibold text-white">{item.qty}</span>
                   <button onClick={() => updateQty(item.id, item.qty + 1)} disabled={item.qty >= item.maxQty} className="px-2 py-1 text-[#999] hover:text-white hover:bg-[#222] disabled:opacity-30 rounded-r">+</button>
                 </div>
-                <button onClick={() => removeItem(item.id)} className="text-xs text-[#FF2D78] hover:underline">remove</button>
+                <button onClick={() => removeItem(item.id)} className="text-xs text-[#FF2D78] hover:underline">Remove</button>
               </div>
             </div>
             <div className="text-right shrink-0">
@@ -55,11 +55,11 @@ export default function Cart() {
 
       <div className="border-t border-[#222] pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <p className="text-sm text-[#999]">total</p>
+          <p className="text-sm text-[#999]">Total</p>
           <p className="font-heading text-2xl font-bold text-[#FFD700]">{formatPrice(total)}</p>
         </div>
         <Link to="/checkout" className="bg-[#FF2D78] text-white px-10 py-3 font-semibold text-sm rounded hover:bg-[#FF2D78]/90 transition">
-          proceed to checkout
+          Proceed to Checkout
         </Link>
       </div>
     </div>

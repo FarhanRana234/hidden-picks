@@ -46,14 +46,15 @@ export default function Shop() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2">Shop All</h1>
-      <p className="text-[#999] text-sm mb-8">find your perfect digicam</p>
+      <p className="text-[#999] text-sm mb-8">Find Your Perfect Digicam</p>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <button className="md:hidden bg-[#111] text-white px-4 py-2 text-sm rounded mb-4 border border-[#222]" onClick={() => setShowFilters(!showFilters)}>
-          {showFilters ? 'hide filters' : 'show filters'}
-        </button>
-
-        <aside className={`md:w-56 shrink-0 space-y-6 ${showFilters ? 'block' : 'hidden'} md:block`}>
+        <aside className="md:w-56 shrink-0">
+          <div className="shop-sidebar-toggle md:hidden" onClick={() => setShowFilters(!showFilters)}>
+            <span>Filters</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          </div>
+          <div className={`shop-filters ${showFilters ? 'open' : ''} space-y-6`}>
           <div>
             <h4 className="font-heading text-xs font-bold tracking-wider text-[#999] mb-3">Brand</h4>
             <div className="space-y-1.5">
@@ -92,15 +93,16 @@ export default function Shop() {
             <input type="range" min="0" max="200000" step="1000" value={priceRange[1]} onChange={e => setPriceRange([0, Number(e.target.value)])} className="w-full" />
             <p className="text-xs text-[#999] mt-1">₨ 0 — ₨ {Number(priceRange[1]).toLocaleString('en-PK')}</p>
           </div>
+          </div>
         </aside>
 
         <div className="flex-1">
           <div className="flex items-center justify-between mb-4">
             <p className="text-sm text-[#999]">{filtered.length} product{filtered.length !== 1 ? 's' : ''}</p>
             <select value={sort} onChange={e => setSort(e.target.value)} className="text-sm bg-[#111] text-white border border-[#222] px-3 py-1.5 rounded">
-              <option value="newest">newest</option>
-              <option value="price-asc">price low–high</option>
-              <option value="price-desc">price high–low</option>
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price Low–High</option>
+              <option value="price-desc">Price High–Low</option>
             </select>
           </div>
 
@@ -116,7 +118,7 @@ export default function Shop() {
           )}
 
           {filtered.length === 0 ? (
-            <p className="text-center py-20 text-[#555] font-heading text-xl">no cameras match your filters.</p>
+            <p className="text-center py-20 text-[#555] font-heading text-xl">No cameras match your filters.</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {filtered.map(p => (

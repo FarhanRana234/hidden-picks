@@ -22,13 +22,13 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="bg-[#0A0A0A] text-white sticky top-0 z-50 border-b border-[#222]">
+      <nav className="navbar bg-[#0A0A0A] text-white sticky top-0 z-50 border-b border-[#222]">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link to="/" className="font-heading text-xl font-bold tracking-tight">
             Hidden Picks
           </Link>
 
-          <div className="hidden md:flex items-center gap-7 font-body text-sm">
+          <div className="navbar-links hidden md:flex items-center gap-7 font-body text-sm">
             {links.map(l => (
               <Link key={l.label} to={l.to} className={`relative pb-1 transition ${isActive(l.to) ? 'text-white' : 'text-[#999] hover:text-white'}`}>
                 {l.label}
@@ -59,7 +59,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#0A0A0A] flex flex-col items-center justify-center gap-8 md:hidden">
+        <div className="navbar-mobile-menu fixed inset-0 z-40 bg-[#0A0A0A] flex flex-col items-center justify-center gap-8 md:hidden">
           {links.map(l => (
             <Link key={l.label} to={l.to} onClick={() => setMenuOpen(false)} className="font-heading text-3xl text-white hover:text-[#FF2D78] transition">{l.label}</Link>
           ))}
