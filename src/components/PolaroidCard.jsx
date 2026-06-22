@@ -7,7 +7,7 @@ export default function PolaroidCard({ product }) {
   return (
     <Link to={`/product/${product.slug}`} className="block relative group">
       {isNew && (
-        <span className="absolute -top-1 -right-1 z-10 bg-[#FF2D78] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">new</span>
+        <span className="absolute -top-1 -right-1 z-10 bg-[#FF2D78] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wider">New</span>
       )}
       <div className={`bg-[#111] p-2 pb-6 rounded-lg border border-[#222] ${rotations[Math.floor(Math.random() * rotations.length)]} hover:scale-105 transition-transform duration-300`}>
         <div className="aspect-square overflow-hidden rounded mb-2 bg-[#0A0A0A]">

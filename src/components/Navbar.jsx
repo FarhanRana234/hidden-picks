@@ -24,8 +24,8 @@ export default function Navbar() {
     <>
       <nav className="bg-[#0A0A0A] text-white sticky top-0 z-50 border-b border-[#222]">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link to="/" className="font-heading text-xl font-bold tracking-tight lowercase">
-            hidden picks
+          <Link to="/" className="font-heading text-xl font-bold tracking-tight">
+            Hidden Picks
           </Link>
 
           <div className="hidden md:flex items-center gap-7 font-body text-sm">

@@ -121,7 +121,7 @@ export default function Product() {
       {/* Related */}
       {related.length > 0 && (
         <div>
-          <h2 className="font-heading text-2xl font-bold mb-6 lowercase">you might also like</h2>
+          <h2 className="font-heading text-2xl font-bold mb-6">You Might Also Like</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {related.map(p => (
               <ProductCard key={p.id} product={p} />

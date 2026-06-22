@@ -57,7 +57,7 @@ export default function AdminSettings() {
       </nav>
 
       <div className="max-w-3xl mx-auto px-4 py-8">
-        <h1 className="font-heading text-3xl font-bold mb-8 lowercase">store settings</h1>
+        <h1 className="font-heading text-3xl font-bold mb-8">Store Settings</h1>
 
         <form onSubmit={handleSubmit} className="bg-[#111] border border-[#222] p-6 rounded-lg space-y-6">
           <div>

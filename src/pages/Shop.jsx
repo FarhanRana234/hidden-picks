@@ -45,7 +45,7 @@ export default function Shop() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2 lowercase">shop all</h1>
+      <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2">Shop All</h1>
       <p className="text-[#999] text-sm mb-8">find your perfect digicam</p>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -55,7 +55,7 @@ export default function Shop() {
 
         <aside className={`md:w-56 shrink-0 space-y-6 ${showFilters ? 'block' : 'hidden'} md:block`}>
           <div>
-            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-[#999] mb-3">brand</h4>
+            <h4 className="font-heading text-xs font-bold tracking-wider text-[#999] mb-3">Brand</h4>
             <div className="space-y-1.5">
               {brands.map(b => (
                 <label key={b} className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
@@ -66,7 +66,7 @@ export default function Shop() {
             </div>
           </div>
           <div>
-            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-[#999] mb-3">era</h4>
+            <h4 className="font-heading text-xs font-bold tracking-wider text-[#999] mb-3">Era</h4>
             <div className="space-y-1.5">
               {eras.map(e => (
                 <label key={e} className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
@@ -77,7 +77,7 @@ export default function Shop() {
             </div>
           </div>
           <div>
-            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-[#999] mb-3">condition</h4>
+            <h4 className="font-heading text-xs font-bold tracking-wider text-[#999] mb-3">Condition</h4>
             <div className="space-y-1.5">
               {conditions.map(c => (
                 <label key={c} className="flex items-center gap-2 text-sm cursor-pointer text-[#ccc]">
@@ -88,7 +88,7 @@ export default function Shop() {
             </div>
           </div>
           <div>
-            <h4 className="font-heading text-xs font-bold uppercase tracking-wider text-[#999] mb-3">price (pkr)</h4>
+            <h4 className="font-heading text-xs font-bold tracking-wider text-[#999] mb-3">Price (PKR)</h4>
             <input type="range" min="0" max="200000" step="1000" value={priceRange[1]} onChange={e => setPriceRange([0, Number(e.target.value)])} className="w-full" />
             <p className="text-xs text-[#999] mt-1">₨ 0 — ₨ {Number(priceRange[1]).toLocaleString('en-PK')}</p>
           </div>

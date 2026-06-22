@@ -11,18 +11,18 @@ const brands = ['Sony', 'Canon', 'Fujifilm', 'Nikon', 'Kodak', 'Samsung', 'Vashi
 const defaultBanners = {
   banner1: {
     videoUrl: 'https://cdn.pixabay.com/video/2023/08/15/175801-854671624_large.mp4',
-    heading: 'the flip era',
-    subtext: 'pocket-sized. iconic. never forgotten.',
+    heading: 'The Flip Era',
+    subtext: 'Pocket-sized. Iconic. Never Forgotten.',
   },
   banner2: {
     videoUrl: 'https://cdn.pixabay.com/video/2020/04/19/36798-428813922_large.mp4',
-    heading: "shoot like it's 2004",
-    subtext: 'ccd sensors. warm tones. real memories.',
+    heading: "Shoot Like It's 2004",
+    subtext: 'CCD Sensors. Warm Tones. Real Memories.',
   },
   banner3: {
     videoUrl: 'https://cdn.pixabay.com/video/2023/10/10/183947-872316115_large.mp4',
-    heading: 'every shot tells a story',
-    subtext: 'hidden picks brings you hand-picked digicams from lahore.',
+    heading: 'Every Shot Tells a Story',
+    subtext: 'Hidden Picks brings you hand-picked digicams from Lahore.',
   },
 }
 
@@ -86,12 +86,12 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center px-4 grain corner-bracket overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-[#FF2D78]/5 to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto text-center relative z-10 py-24">
-          <h1 className="font-heading text-[40px] md:text-[72px] font-bold uppercase tracking-[-0.02em] leading-[1.1] mb-6">
-            shoot different.<br />
-            <span className="text-[#FF2D78]">capture everything.</span>
+          <h1 className="font-heading text-[40px] md:text-[72px] font-bold leading-[1.1] mb-6">
+            Shoot Different.<br />
+            <span className="text-[#FF2D78]">Capture Everything.</span>
           </h1>
           <p className="font-body text-base md:text-lg text-[#999] max-w-xl mx-auto mb-10 leading-relaxed">
-            lahore's only curated digicam store. y2k, ccd & vintage cameras shipped across pakistan.
+            Lahore's only curated digicam store. Y2K, CCD & vintage cameras shipped across Pakistan.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/shop" className="bg-[#FF2D78] text-white font-semibold px-8 py-3 text-sm hover:bg-[#FF2D78]/90 transition rounded" style={{ letterSpacing: '0.04em' }}>
@@ -151,7 +151,7 @@ export default function Home() {
       <section className="py-16 md:py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="font-heading text-3xl md:text-4xl font-semibold lowercase">fresh drops</h2>
+            <h2 className="font-heading text-3xl md:text-4xl font-semibold">Fresh Drops</h2>
             <div className="w-12 h-0.5 bg-[#FF2D78] mx-auto mt-3" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
@@ -166,7 +166,7 @@ export default function Home() {
       <section className="py-10 bg-[#0A0A0A] border-y border-[#222] overflow-hidden">
         <div className="flex marquee-track whitespace-nowrap">
           {[...brands, ...brands].map((b, i) => (
-            <span key={i} className="font-heading text-lg md:text-xl text-[#555] tracking-[0.2em] uppercase mx-8">{b}</span>
+            <span key={i} className="font-heading text-lg md:text-xl text-[#555] tracking-[0.2em] mx-8">{b}</span>
           ))}
         </div>
       </section>
@@ -174,12 +174,12 @@ export default function Home() {
       {/* Why Hidden Picks */}
       <section className="py-16 md:py-24 px-4">
         <div className="max-w-5xl mx-auto">
-          <h2 className="font-heading text-3xl md:text-4xl font-semibold text-center lowercase mb-12">why hidden picks</h2>
+          <h2 className="font-heading text-3xl md:text-4xl font-semibold text-center mb-12">Why Hidden Picks</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {features.map(f => (
               <div key={f.title} className="bg-[#111] border border-[#222] rounded-lg p-6 text-center">
                 <div className="text-[#FF2D78] flex justify-center mb-4">{f.icon}</div>
-                <h4 className="font-heading text-base font-bold mb-2 lowercase">{f.title}</h4>
+                <h4 className="font-heading text-base font-bold mb-2">{f.title}</h4>
                 <p className="text-sm text-[#999] leading-relaxed">{f.desc}</p>
               </div>
             ))}
@@ -190,7 +190,7 @@ export default function Home() {
       {/* Pack an Order With Me */}
       <section className="py-16 px-4 bg-[#111]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold mb-10">pack an order with me 📦</h2>
+          <h2 className="font-heading text-2xl md:text-3xl font-bold mb-10">Pack an Order With Me 📦</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { num: '01', title: 'browse & pick', desc: 'find your perfect digicam from our curated collection.' },
@@ -199,7 +199,7 @@ export default function Home() {
             ].map(s => (
               <div key={s.num} className="bg-[#0A0A0A] border border-[#222] rounded-lg p-6">
                 <span className="text-[#FF2D78] font-heading text-3xl font-bold block mb-3">{s.num}</span>
-                <h4 className="font-heading text-lg font-bold mb-2 lowercase">{s.title}</h4>
+                <h4 className="font-heading text-lg font-bold mb-2">{s.title}</h4>
                 <p className="text-sm text-[#999]">{s.desc}</p>
               </div>
             ))}

@@ -16,7 +16,7 @@ export default function ProductCard({ product }) {
     <div className="bg-[#111] rounded-lg border border-[#222] overflow-hidden group relative">
       {/* NEW badge */}
       {isNew && !soldOut && (
-        <span className="absolute top-2 left-2 z-10 bg-[#FF2D78] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">new</span>
+        <span className="absolute top-2 left-2 z-10 bg-[#FF2D78] text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wider">New</span>
       )}
 
       <Link to={`/product/${product.slug}`} className="block relative">

@@ -28,7 +28,7 @@ export default function OrderConfirmation() {
       </p>
 
       <div className="bg-[#111] border border-[#222] p-6 rounded-lg text-left mb-8 max-w-sm mx-auto">
-        <h3 className="font-heading font-bold text-lg mb-3 lowercase">order summary</h3>
+        <h3 className="font-heading font-bold text-lg mb-3">Order Summary</h3>
         <div className="space-y-1 text-sm text-[#ccc]">
           <p><strong className="text-white">name:</strong> {order.customerName}</p>
           <p><strong className="text-white">phone:</strong> {order.phone}</p>

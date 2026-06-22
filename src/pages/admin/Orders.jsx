@@ -41,11 +41,11 @@ export default function AdminOrders() {
       </nav>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="font-heading text-3xl font-bold mb-8 lowercase">orders</h1>
+        <h1 className="font-heading text-3xl font-bold mb-8">Orders</h1>
 
         <div className="bg-[#111] border border-[#222] rounded-lg overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-[#0A0A0A] text-[#999] text-xs uppercase tracking-wider">
+            <thead className="bg-[#0A0A0A] text-[#999] text-xs tracking-wider">
               <tr>
                 <th className="p-3 text-left">order id</th>
                 <th className="p-3 text-left">name</th>
@@ -69,12 +69,12 @@ export default function AdminOrders() {
                     {o.items?.map(i => `${i.name} x${i.qty}`).join(', ') || '-'}
                   </td>
                   <td className="p-3 font-semibold text-[#FFD700]">{formatPrice(o.total)}</td>
-                  <td className="p-3 text-xs uppercase text-[#999]">{o.paymentMethod}</td>
+                  <td className="p-3 text-xs text-[#999]">{o.paymentMethod}</td>
                   <td className="p-3">
                     <select
                       value={o.status}
                       onChange={e => handleStatusChange(o.id, e.target.value)}
-                      className={`text-xs px-2 py-1 border rounded font-semibold uppercase bg-[#0A0A0A] ${o.status === 'Delivered' ? 'text-green-400 border-green-800' : o.status === 'Cancelled' ? 'text-red-400 border-red-800' : 'text-yellow-400 border-yellow-800'}`}
+                      className={`text-xs px-2 py-1 border rounded font-semibold bg-[#0A0A0A] ${o.status === 'Delivered' ? 'text-green-400 border-green-800' : o.status === 'Cancelled' ? 'text-red-400 border-red-800' : 'text-yellow-400 border-yellow-800'}`}
                     >
                       {STATUSES.map(s => <option key={s} value={s} className="bg-[#0A0A0A]">{s}</option>)}
                     </select>

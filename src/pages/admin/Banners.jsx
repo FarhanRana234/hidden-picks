@@ -98,7 +98,7 @@ export default function AdminBanners() {
       </nav>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="font-heading text-3xl font-bold mb-2 lowercase">video banners</h1>
+        <h1 className="font-heading text-3xl font-bold mb-2">Video Banners</h1>
         <p className="text-[#999] text-sm mb-8">manage the 3 homepage video banners. upload .mp4 files (max 50MB each).</p>
 
         <div className="space-y-8">

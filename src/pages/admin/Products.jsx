@@ -141,7 +141,7 @@ export default function AdminProducts() {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="font-heading text-3xl font-bold lowercase">products</h1>
+          <h1 className="font-heading text-3xl font-bold">Products</h1>
           <button onClick={() => { resetForm(); setShowForm(true) }} className="bg-[#FF2D78] text-white px-6 py-2 text-sm font-semibold rounded hover:bg-[#FF2D78]/90 transition">
             + add product
           </button>
@@ -242,7 +242,7 @@ export default function AdminProducts() {
 
         <div className="bg-[#111] border border-[#222] rounded-lg overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-[#0A0A0A] text-[#999] text-xs uppercase tracking-wider">
+            <thead className="bg-[#0A0A0A] text-[#999] text-xs tracking-wider">
               <tr>
                 <th className="p-3 text-left">image</th>
                 <th className="p-3 text-left">name</th>
@@ -262,9 +262,9 @@ export default function AdminProducts() {
                   </td>
                   <td className="p-3 font-semibold">{p.name}</td>
                   <td className="p-3">{formatPrice(p.price)}</td>
-                  <td className="p-3 text-xs uppercase text-[#999]">{p.condition}</td>
+                  <td className="p-3 text-xs text-[#999]">{p.condition}</td>
                   <td className="p-3">
-                    <button onClick={() => toggleSoldOut(p.id, p.isSoldOut)} className={`text-xs px-2 py-0.5 font-semibold uppercase rounded ${p.isSoldOut ? 'bg-red-900/30 text-red-400' : 'bg-green-900/30 text-green-400'}`}>
+                    <button onClick={() => toggleSoldOut(p.id, p.isSoldOut)} className={`text-xs px-2 py-0.5 font-semibold rounded ${p.isSoldOut ? 'bg-red-900/30 text-red-400' : 'bg-green-900/30 text-green-400'}`}>
                       {p.isSoldOut ? 'sold out' : 'active'}
                     </button>
                   </td>

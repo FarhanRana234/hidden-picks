@@ -31,7 +31,7 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       <AdminNav logout={logout} />
       <div className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="font-heading text-3xl font-bold mb-8 lowercase">dashboard</h1>
+        <h1 className="font-heading text-3xl font-bold mb-8">Dashboard</h1>
 
         {settings?.announcementBanner?.show && (
           <div className="bg-[#FF2D78]/10 border border-[#FF2D78]/30 text-sm p-3 mb-8 text-center rounded">{settings.announcementBanner.text}</div>
@@ -72,7 +72,7 @@ function StatCard({ label, value }) {
   return (
     <div className="bg-[#111] border border-[#222] p-4 rounded-lg text-center">
       <p className="font-heading text-3xl font-bold text-[#FF2D78]">{value}</p>
-      <p className="text-xs uppercase tracking-wider text-[#999] mt-1">{label}</p>
+      <p className="text-xs tracking-wider text-[#999] mt-1">{label}</p>
     </div>
   )
 }

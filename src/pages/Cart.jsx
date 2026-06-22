@@ -22,7 +22,7 @@ export default function Cart() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="font-heading text-3xl font-bold mb-8 lowercase">cart ({count} item{count !== 1 ? 's' : ''})</h1>
+      <h1 className="font-heading text-3xl font-bold mb-8">Cart ({count} item{count !== 1 ? 's' : ''})</h1>
 
       <div className="space-y-3 mb-8">
         {items.map(item => (
