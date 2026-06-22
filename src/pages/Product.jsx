@@ -135,7 +135,7 @@ export default function Product() {
           </div>
           <h1>{product.name}</h1>
           <p className="product-price">{formatPrice(product.price)}</p>
-          <p className="product-description">{product.description}</p>
+          {product.description && <p className="product-description">{product.description}</p>}
 
           <hr className="border-[#222] my-6" />
 

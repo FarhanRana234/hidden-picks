@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { getProducts, addProduct, updateProduct, deleteProduct } from '../../firebase/products'
@@ -14,8 +14,10 @@ export default function AdminProducts() {
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState({
     name: '', brand: '', era: '', condition: '', price: '', description: '',
-    isUnique: false, isSoldOut: false, isActive: true, specs: {},
+    isUnique: false, isSoldOut: false, isActive: true,
   })
+  const [specRows, setSpecRows] = useState([])
+  const specIdRef = useRef(0)
   const [slug, setSlug] = useState('')
   const [files, setFiles] = useState([])
   const [saving, setSaving] = useState(false)
@@ -31,7 +33,8 @@ export default function AdminProducts() {
   }
 
   function resetForm() {
-    setForm({ name: '', brand: '', era: '', condition: '', price: '', description: '', isUnique: false, isSoldOut: false, isActive: true, specs: {} })
+    setForm({ name: '', brand: '', era: '', condition: '', price: '', description: '', isUnique: false, isSoldOut: false, isActive: true })
+    setSpecRows([])
     setSlug('')
     setFiles([])
     setEditing(null)
@@ -43,39 +46,37 @@ export default function AdminProducts() {
       name: p.name || '', brand: p.brand || '', era: p.era || '', condition: p.condition || '',
       price: p.price || '', description: p.description || '',
       isUnique: p.isUnique || false, isSoldOut: p.isSoldOut || false, isActive: p.isActive ?? true,
-      specs: p.specs || {},
     })
+    if (p.specs && typeof p.specs === 'object') {
+      const rows = Object.entries(p.specs).map(([k, v]) => {
+        specIdRef.current += 1
+        return { id: specIdRef.current, key: k, value: v }
+      })
+      setSpecRows(rows)
+    } else {
+      setSpecRows([])
+    }
     setSlug(p.slug || '')
     setEditing(p.id)
     setShowForm(true)
     window.scrollTo(0, 0)
   }
 
-  function handleSpecKeyChange(oldKey, newKey) {
-    setForm(prev => {
-      const specs = { ...prev.specs }
-      if (oldKey !== newKey) {
-        specs[newKey] = specs[oldKey]
-        delete specs[oldKey]
-      }
-      return { ...prev, specs }
-    })
-  }
-
-  function handleSpecValueChange(key, value) {
-    setForm(prev => ({ ...prev, specs: { ...prev.specs, [key]: value } }))
-  }
-
   function addSpec() {
-    setForm(prev => ({ ...prev, specs: { ...prev.specs, '': '' } }))
+    specIdRef.current += 1
+    setSpecRows(prev => [...prev, { id: specIdRef.current, key: '', value: '' }])
   }
 
-  function removeSpec(key) {
-    setForm(prev => {
-      const specs = { ...prev.specs }
-      delete specs[key]
-      return { ...prev, specs }
-    })
+  function updateSpecKey(id, newKey) {
+    setSpecRows(prev => prev.map(r => r.id === id ? { ...r, key: newKey } : r))
+  }
+
+  function updateSpecValue(id, newValue) {
+    setSpecRows(prev => prev.map(r => r.id === id ? { ...r, value: newValue } : r))
+  }
+
+  function removeSpec(id) {
+    setSpecRows(prev => prev.filter(r => r.id !== id))
   }
 
   async function handleSubmit(e) {
@@ -86,7 +87,7 @@ export default function AdminProducts() {
         ...form,
         price: String(form.price),
         slug: slug || form.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
-        specs: Object.fromEntries(Object.entries(form.specs).filter(([k, v]) => k.trim() && v.trim())),
+        specs: Object.fromEntries(specRows.filter(r => r.key.trim() && r.value.trim()).map(r => [r.key, r.value])),
       }
 
       const urls = []
@@ -98,7 +99,8 @@ export default function AdminProducts() {
       }
 
       if (editing) {
-        await updateProduct(editing, { ...data, images: urls.length > 0 ? urls : undefined })
+        if (urls.length > 0) data.images = urls
+        await updateProduct(editing, data)
       } else {
         const docRef = await addProduct(data)
         if (urls.length > 0) {
@@ -190,11 +192,11 @@ export default function AdminProducts() {
               <button type="button" onClick={addSpec} className="text-xs text-[#FF2D78] hover:underline">+ Add spec</button>
             </div>
             <div className="space-y-2">
-              {Object.entries(form.specs).map(([key, val]) => (
-                <div key={key} className="flex gap-2 items-center">
-                  <input value={key} onChange={e => handleSpecKeyChange(key, e.target.value)} placeholder="Key (e.g. Megapixels)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
-                  <input value={val} onChange={e => handleSpecValueChange(key, e.target.value)} placeholder="Value (e.g. 10MP)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
-                  <button type="button" onClick={() => removeSpec(key)} className="text-[#FF2D78] text-xs hover:underline">Remove</button>
+              {specRows.map(r => (
+                <div key={r.id} className="flex gap-2 items-center">
+                  <input value={r.key} onChange={e => updateSpecKey(r.id, e.target.value)} placeholder="Key (e.g. Megapixels)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
+                  <input value={r.value} onChange={e => updateSpecValue(r.id, e.target.value)} placeholder="Value (e.g. 10MP)" className="flex-1 bg-[#0A0A0A] border border-[#222] text-white px-3 py-1.5 text-sm rounded" />
+                  <button type="button" onClick={() => removeSpec(r.id)} className="text-[#FF2D78] text-xs hover:underline">Remove</button>
                 </div>
               ))}
             </div>
